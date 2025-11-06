@@ -1,26 +1,30 @@
 @import "tailwindcss";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
+@layer utilities {
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
+  .no-clear::-webkit-search-cancel-button {
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+    display: none;
+    appearance: none;
+
   }
+
+  .no-clear::-ms-clear {
+    display: none;
+    width: 0;
+    height: 0;
+  }
+
 }
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+@theme {
+
+  --color-fg: oklch(0.6824 0.0852 55.05);
+  --color-fg-hover: oklch(0.4 0.0852 55.05);  
+  --color-bg: oklch(0.898 0.0151 55.05);
+  --color-bg-2: oklch(0.9 0 55.05);
+  --color-text: oklch(0.111 0 5.32);
+  --colot-text-hover: oklch(0.333 0 5.32);
+  --color-shadow: oklch(0.111 0 5.32 / 20%);
+
 }
