@@ -2,6 +2,8 @@ import { TbChevronDown, TbSearch, TbShoppingCart } from "react-icons/tb"
 import ItemExpandable from "./ItemExpandable"
 import Link from "next/link"
 import Image from "next/image"
+import ProfileDropdown from "./ProfileDropdown"
+import { findUserById } from "@/actions"
 
 const listCategory = [
 
@@ -23,22 +25,24 @@ const listCategory = [
 ]
 const NavBar = async () => {
 
+    const data = await findUserById()
+
     return (
 
         <nav 
         className="p-4 w-full bg-fg h-24
-        flex flex-col gap-2 justify-center sm:px-40 font-light">
+        flex flex-col gap-2 justify-center md:px-[10vw] font-light">
 
             <ul
             className="flex-1 flex gap-1
             items-center justify-center text-sm">
 
-            <li className="flex-2">
+            <li className="max-sm:hidden flex-2">
             <Link href="/">
             <Image alt="Logo" src="/logo.png" className="drop-shadow-sm drop-shadow-shadow"
             width={50} height={50} priority/></Link>
             </li>
-            <li className="flex-4">
+            <li className="md:flex-4 flex-5">
             <form action="" className="w-full h-full">
 
                 <div className="w-full h-full relative">
@@ -58,12 +62,17 @@ const NavBar = async () => {
 
             </form>
             </li>
-            <li className="flex-1">
-            <button className="flex items-center justify-center
-            w-full h-full cursor-pointer ">
 
+            <li  className="flex-none flex mx-2 justify-end">
+                <ProfileDropdown user={data?.user} 
+                session={data?.session}/>
+            </li>
+            <li className="flex-none mx-2">
+            <button title="Ver carrinho" className="flex items-center justify-center
+            ml-auto p-1 rounded-sm w-max h-full cursor-pointer hover:bg-fg-hover">
+                
                 <TbShoppingCart size={32} 
-                className="text-text stroke-[0.5] no-clear"/>
+                className="text-text stroke-[0.5] hover:stroke-1"/>
 
             </button>
             </li>

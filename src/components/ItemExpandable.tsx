@@ -29,7 +29,7 @@ const ItemExpandable  = ({Icon, name, listCategory}:Iprops) => {
 
     {visible && 
     
-    <ul className="absolute px-4 py-5 rounded-2xl translate-y-full 
+    <ul className="absolute px-4 py-5 rounded-sm translate-y-full 
     -bottom-2.5 left-0  grid grid-cols-2 grid-rows-6 gap-y-2 gap-x-8 bg-bg-2 
     shadow-sm shadow-inset-shadow [&>li]:cursor-pointer
     [&>li]:hover:font-normal [&>li]:text-start min-w-25 w-45 max-h-[30vh]

@@ -4,7 +4,7 @@ import google from 'next-auth/providers/google'
 import { prisma } from './prisma'
 
 
-export const {handlers, signIn, signOut, auth}  = NextAuth({
+export const { handlers, signIn, signOut, auth }  = NextAuth({
 
     session:{strategy:'jwt'},
     adapter:PrismaAdapter(prisma),
