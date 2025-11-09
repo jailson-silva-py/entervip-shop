@@ -1,5 +1,7 @@
 import { TbChevronDown, TbSearch, TbShoppingCart } from "react-icons/tb"
 import ItemExpandable from "./ItemExpandable"
+import Link from "next/link"
+import Image from "next/image"
 
 const listCategory = [
 
@@ -29,10 +31,12 @@ const NavBar = async () => {
 
             <ul
             className="flex-1 flex gap-1
-            items-center justify-center">
+            items-center justify-center text-sm">
 
             <li className="flex-2">
-            <div>EnterVip Shop</div>
+            <Link href="/">
+            <Image alt="Logo" src="/logo.png" className="drop-shadow-sm drop-shadow-shadow"
+            width={50} height={50} priority/></Link>
             </li>
             <li className="flex-4">
             <form action="" className="w-full h-full">
@@ -47,7 +51,7 @@ const NavBar = async () => {
                 <input type="search" name="searchProduct"
                 id="searchProduct" placeholder="Pesquise ..."
                 className="no-clear bg-bg shadow-[0_0_0_1px] shadow-shadow 
-                rounded-xl pl-10 py-1 tracking-wide outline-0 focus:shadow-[0_0_0_2px]
+                rounded-xl pl-10 py-2 tracking-wide outline-0 focus:shadow-[0_0_0_2px]
                 h-full w-full text-text"/>
 
                 </div>
@@ -68,19 +72,26 @@ const NavBar = async () => {
             <ul className="mx-auto w-9/10 flex-1 flex gap-4
             text-sm items-end justify-center sm:w-4/10">
 
-                <li className="group group-hover:font-extrabold
-                text-center flex-1 min-w-[60px] relative">
+               
 
-                    <ItemExpandable name="Categorias"
-                    Icon={<TbChevronDown size={18} 
-                    className="text-text stroke-1 "/>}
-                    listCategory={listCategory}/>
+                <ItemExpandable name="Categorias"
+                Icon={<TbChevronDown size={18} 
+                className="text-text stroke-1 "/>}
+                listCategory={listCategory}/>
 
+
+                <li className="text-center cursor-pointer flex-1
+                min-w-[60px] hover:font-normal">
+                    Moda
                 </li>
-
-                <li className="text-center flex-1 min-w-[60px]">Moda</li>
-                <li className="text-center flex-1 min-w-[60px]">Eletronicos</li>
-                <li className="text-center flex-1 min-w-[60px]">Beleza</li>
+                <li className="text-center cursor-pointer flex-1
+                min-w-[60px] hover:font-normal">
+                    Eletronicos
+                </li>
+                <li className="text-center cursor-pointer flex-1
+                min-w-[60px] hover:font-normal">
+                    Beleza
+                </li>
 
             </ul>
 
