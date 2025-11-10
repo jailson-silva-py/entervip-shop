@@ -30,6 +30,7 @@
   --color-shadow: oklch(0.111 0 5.32 / 20%);
   --animate-show: .5s show ease-in-out;
 
+
   @keyframes show {
 
     to { opacity: 0;}
