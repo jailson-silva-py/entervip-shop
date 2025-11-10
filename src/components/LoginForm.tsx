@@ -3,6 +3,7 @@ import InputText from "./InputText"
 import { Poppins } from "next/font/google"
 import ClientFormMultiStep from "./ClientFormMultiStep"
 import Link from "next/link"
+import LoginSocialButon from "./LoginSocialButton"
 
 const poppins = Poppins({
 
@@ -28,10 +29,12 @@ const LoginForm = () => {
     <ClientFormMultiStep/>
 
     <p className="text-xs">Esqueceu a senha?
-        <Link className="text-blue-700 font-normal hover:font-medium" href="/recovery_account"> Recuperar</Link>
+        <Link className="text-blue-700 font-normal
+        hover:font-medium" href="/recovery_account"> Recuperar</Link>
     </p>
-
-    fotm
+    
+    <LoginSocialButon socialName="google"/>
+    
     </div>
     )
 
