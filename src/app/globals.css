@@ -24,9 +24,16 @@
   --color-fg-hover: oklch(0.64 0.0852 55.05);  
   --color-bg: oklch(0.898 0.0151 55.05);
   --color-bg-hover: oklch(0.7 0.0151 55.05);
-  --color-bg-2: oklch(0.9 0 55.05);
+  --color-bg-2: oklch(0.88 0.0151 55.05);
   --color-text: oklch(0.111 0 5.32);
   --color-text-hover: oklch(0.333 0 5.32);
   --color-shadow: oklch(0.111 0 5.32 / 20%);
+  --animate-show: .5s show ease-in-out;
+
+  @keyframes show {
+
+    to { opacity: 0;}
+
+  }
 
 }

@@ -1,11 +1,11 @@
 const Cart = () => {
-
+    
 
 
     return (
 
         <>
-        Cart
+        
 
         </>
 

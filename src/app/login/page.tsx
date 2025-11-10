@@ -1,10 +1,10 @@
-import { signIn } from "next-auth/react"
+import LoginForm from "@/components/LoginForm"
 
 const SignIn = () => {
 
     return (
 
-        <></>
+        <LoginForm/>
 
     )
 

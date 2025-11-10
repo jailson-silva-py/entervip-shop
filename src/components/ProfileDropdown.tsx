@@ -17,7 +17,7 @@ const ProfileDropdown = ({user, session}:Iprops) => {
     
     return (
     <>
-    {user && session ? <button className="h-25 w-25 tracking-widest font-light flex
+    {user && session ? <button className="mx-2 h-25 w-25 tracking-widest font-light flex
     flex-col items-center justify-center gap-2 cursor-pointer">
 
         <Image priority alt={`Perfil de ${user.name}`}
@@ -25,7 +25,8 @@ const ProfileDropdown = ({user, session}:Iprops) => {
         <p className="line-clamp-1">{user.name}</p>
 
     </button>:
-    <Link href="login" className="p-1 rounded-full shadow-[0_0_0_1px]
+    <Link title="Fazer Login" href="login"
+    className="mx-2 p-1 rounded-full shadow-[0_0_0_1px]
     shadow-shadow cursor-pointer hover:shadow-[0_0_0_2px]
     hover:scale-105 hover:[&>svg]:stroke-2">
         <TbUser size={24} className="stroke-1 color-shadow"/>
