@@ -34,7 +34,7 @@ const NavBar = async () => {
         flex flex-col gap-2 justify-center md:px-[10vw] font-light">
 
             <ul
-            className="flex-1 flex gap-1
+            className="w-full flex-1 flex gap-1
             items-center justify-center text-sm">
 
             <li className="max-sm:hidden flex-2">
@@ -63,18 +63,18 @@ const NavBar = async () => {
             </form>
             </li>
 
-            <li  className="flex-none flex mx-2 justify-end">
+            <li  className="flex ml-auto flex-none justify-end ">
                 <ProfileDropdown user={data?.user} 
                 session={data?.session}/>
             </li>
-            <li className="flex-none mx-2">
-            <button title="Ver carrinho" className="flex items-center justify-center
-            ml-auto p-1 rounded-sm w-max h-full cursor-pointer hover:bg-fg-hover">
+            <li className="flex-none mx-2 max-sm:hidden">
+            <Link href="/cart" title="Ver carrinho" className="flex items-center justify-center
+            ml-auto p-1 rounded-sm w-max h-full cursor-pointer">
                 
                 <TbShoppingCart size={32} 
                 className="text-text stroke-[0.5] hover:stroke-1"/>
 
-            </button>
+            </Link>
             </li>
 
             </ul>

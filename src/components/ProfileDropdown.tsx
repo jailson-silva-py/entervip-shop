@@ -25,8 +25,8 @@ const ProfileDropdown = ({user, session}:Iprops) => {
     return (
     <>
     {user && session ? 
-    <div className="relative">
-    <button className="relative mx-2 h-10 w-10 tracking-widest font-light flex
+    <div className="relative" ref={refElement}>
+    <button className="relative  mx-2 h-10 w-10 tracking-widest font-light flex
     flex-col items-center justify-center hover:scale-105 gap-2
     cursor-pointer group" 
     onClick={() => setOpen(prev => !prev)}>
@@ -39,13 +39,12 @@ const ProfileDropdown = ({user, session}:Iprops) => {
 
     </button>
     {open && <ul className="absolute bg-bg rounded-sm p-2 flex flex-col
-    gap-2 w-50 -bottom-2 left-1/2 translate-y-full z-3
+    gap-2 w-50 -bottom-3 left-1/2 translate-y-full z-3
     -translate-x-1/2 shadow-shadow shadow-xs 
-    before:content-[''] before:absolute before:top-0
+    before:content-[''] before:absolute before:top-1
     before:left-1/2 before:-translate-x-1/2 before:-translate-y-full
-    before:bg-bg before:h-3 before:w-3 
-    before:[clip-path:polygon(0%_100%,100%_100%,50%_50%)]" 
-    ref={refElement}>
+    before:bg-bg before:h-5 before:w-5 
+    before:[clip-path:polygon(0%_100%,100%_100%,50%_50%)]">
 
         <li className="group">
             <Link href="/profile" className="flex px-[20%] py-1
