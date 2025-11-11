@@ -108,8 +108,8 @@ export interface Product {
   description?: string | null;
   status: ProductStatus;
   brandId?: string | null;
-  createdAt: string; // ISO
-  updatedAt: string; // ISO
+  createdAt?: string; // ISO
+  updatedAt?: string; // ISO
 
   // campo denormalizado
   searchText: string; // default ""
