@@ -40,9 +40,9 @@ const ProfileDropdown = ({user, session}:Iprops) => {
     </button>
     {open && <ul className="absolute bg-bg rounded-sm p-2 flex flex-col
     gap-2 w-50 -bottom-3 left-1/2 translate-y-full z-3
-    -translate-x-1/2 shadow-shadow shadow-xs 
+    -translate-x-1/2 max-sm:-translate-x-9/10 shadow-shadow shadow-xs 
     before:content-[''] before:absolute before:top-1
-    before:left-1/2 before:-translate-x-1/2 before:-translate-y-full
+    before:left-1/2 max-sm:before:left-9/10 before:-translate-x-1/2 before:-translate-y-full
     before:bg-bg before:h-5 before:w-5 
     before:[clip-path:polygon(0%_100%,100%_100%,50%_50%)]">
 

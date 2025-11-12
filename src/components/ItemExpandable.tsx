@@ -1,12 +1,14 @@
 "use client";
 import useOutclickElement from '@/hooks/useOutClick';
 import { JSX, useState } from 'react'
+import { makeSlug } from '@/utils/slugUtil';
+import Link from 'next/link';
 
 interface Iprops  {
 
     Icon:JSX.Element,
     name:string,
-    listCategory:JSX.Element[]
+    listCategory:string[]
 
 }
 
@@ -17,7 +19,7 @@ const ItemExpandable  = ({Icon, name, listCategory}:Iprops) => {
     return(
     <li ref={refElement} 
     className='group group-hover:font-extrabold
-    text-center flex-1 min-w-[60px] relative'>
+    text-center flex-1 min-w-[60px] max-sm:bg-red-100'>
     <button 
     onClick={() => setVisible(prev => !prev)}
     className="group flex items-center
@@ -29,14 +31,16 @@ const ItemExpandable  = ({Icon, name, listCategory}:Iprops) => {
 
     {visible && 
     
-    <ul className="absolute px-4 py-5 rounded-sm translate-y-full 
-    -bottom-2.5 left-0  grid grid-cols-2 grid-rows-6 gap-y-2 gap-x-8 bg-bg-2 
-    shadow-sm shadow-inset-shadow [&>li]:cursor-pointer
-    [&>li]:hover:font-normal [&>li]:text-start min-w-25 w-45 max-h-[30vh]
-    overflow-x-auto z-10">
+    <ul className="absolute w-screen h-40 max-w-100 grid grid-cols-2 grid-rows-6
+     gap-2 sm:mx-2 px-4 py-5 overflow-hidden rounded-sm translate-y-full 
+    -bottom-2.5 max-sm:bottom-0 left-0 bg-bg-2 shadow-sm shadow-inset-shadow
+    [&>li]:cursor-pointer [&>li]:hover:font-normal
+    [&>li]:text-start z-10">
 
 
-        {listCategory.map((v) => v)}
+        {listCategory.map((v) => (
+            <li><Link href={makeSlug(v)}>{v}</Link></li>
+        ))}
    
     </ul>
     

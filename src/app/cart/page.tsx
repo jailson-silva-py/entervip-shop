@@ -1,6 +1,7 @@
 import {prisma} from 'prisma'
 import slugify from 'slugify'
 import { products } from './products_seed'
+import { seedPopular40 } from './seedPopular40'
 
 const makeSlug = (s:string) => {
 
@@ -88,8 +89,6 @@ const handleCreations = async () => {
 
 const Cart = async () => {
     
-    const count = await prisma.product.count()
-    console.log(count)
     return (
 
        <></>

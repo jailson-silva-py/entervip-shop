@@ -24,35 +24,7 @@ const ProductsCategory = ({title}:ProductsCategoryProps) => {
         <div className="p-4 overflow-hidden flex flex-wrap gap-2
         ">
 
-            <CardProduct/>
-            <CardProduct/>
-            <CardProduct/>
-            <CardProduct/>
-            <CardProduct/>
-            <CardProduct/>
-            <CardProduct/>
-            <CardProduct/>
-            <CardProduct/>
-            <CardProduct/>
-            <CardProduct/>
-            <CardProduct/>
-            <CardProduct/>
-            <CardProduct/>
-            <CardProduct/>
-            <CardProduct/>
-            <CardProduct/>
-            <CardProduct/>
-            {/* <div className="bg-amber-300"/>
-            <div className="bg-amber-300"/>
-            <div className="bg-amber-300"/>
-            <div className="bg-amber-300"/>
-            <div className="bg-amber-300"/>
-            <div className="bg-amber-300"/>
-            <div className="bg-amber-300"/>
-            <div className="bg-amber-300"/>
-            <div className="bg-amber-300"/>
-            <div className="bg-amber-300"/>
-            <div className="bg-amber-300"/> */}
+            {}
 
         </div>
 

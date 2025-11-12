@@ -6,23 +6,11 @@ import ProfileDropdown from "./ProfileDropdown"
 import { findUserById } from "@/actions"
 
 const listCategory = [
-
-    <li>Brinquedos</li>,
-    <li>Cozinha</li>,
-    <li>Acessórios</li>,
-    <li>Beleza</li>,
-    <li>Eletrônicos</li>,
-    <li>Moda</li>,
-
-    <li>Brinquedos</li>,
-    <li>Cozinha</li>,
-    <li>Acessórios</li>,
-    <li>Beleza</li>,
-    <li>Eletrônicos</li>,
-    <li>Moda</li>,
-
-
-]
+         'Brinquedos', 'Cozinha', 'Acessórios', 'Beleza',
+         'Eletrônicos', 'Moda', 'Esporte & Fitness',
+         'Papelaria & Escritório', 'Pet Shop', 'Automotivo',
+         'Móveis', 'Jardim & Varanda',
+     ]
 const NavBar = async () => {
 
     const data = await findUserById()
@@ -30,7 +18,7 @@ const NavBar = async () => {
     return (
 
         <nav 
-        className="p-4 w-full bg-fg h-24
+        className="p-4 w-full bg-fg h-24 relative
         flex flex-col gap-2 justify-center md:px-[10vw] font-light">
 
             <ul
@@ -78,7 +66,7 @@ const NavBar = async () => {
             </li>
 
             </ul>
-            <ul className="mx-auto w-9/10 flex-1 flex gap-4
+            <ul className="sm:relative mx-auto w-9/10 flex-1 flex gap-4
             text-sm items-end justify-center sm:w-4/10">
 
                
@@ -95,7 +83,7 @@ const NavBar = async () => {
                 </li>
                 <li className="text-center cursor-pointer flex-1
                 min-w-[60px] hover:font-normal">
-                    Eletronicos
+                    Eletrônicos
                 </li>
                 <li className="text-center cursor-pointer flex-1
                 min-w-[60px] hover:font-normal">
