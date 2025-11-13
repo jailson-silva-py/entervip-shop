@@ -6,6 +6,8 @@ interface Iprops {
 
 }
 
+export const revalidate = 1800
+
 export async function generateStaticParams() {
     
     const categories = await prisma.category.findMany() 

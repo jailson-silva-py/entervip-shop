@@ -60,7 +60,7 @@ const NavBar = async () => {
             ml-auto p-1 rounded-sm w-max h-full cursor-pointer">
                 
                 <TbShoppingCart size={32} 
-                className="text-text stroke-[0.5] hover:stroke-1"/>
+                className="text-text stroke-[0.5] hover:stroke-[1.5]"/>
 
             </Link>
             </li>
@@ -70,10 +70,10 @@ const NavBar = async () => {
             text-sm items-end justify-center sm:w-4/10">
 
                
-
+                                                                                                                                                                                                                                
                 <ItemExpandable name="Categorias"
                 Icon={<TbChevronDown size={18} 
-                className="text-text stroke-1 "/>}
+                className="text-text"/>}
                 listCategory={listCategory}/>
 
 

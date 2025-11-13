@@ -2,6 +2,7 @@ import {prisma} from 'prisma'
 import slugify from 'slugify'
 import { products } from './products_seed'
 import { seedPopular40 } from './seedPopular40'
+import { seedOneVariantPerProduct } from '../../../scripts/createVariantsForAllProducts'
 
 const makeSlug = (s:string) => {
 
@@ -89,6 +90,7 @@ const handleCreations = async () => {
 
 const Cart = async () => {
     
+   
     return (
 
        <></>

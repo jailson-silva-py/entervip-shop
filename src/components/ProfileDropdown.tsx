@@ -50,7 +50,7 @@ const ProfileDropdown = ({user, session}:Iprops) => {
             <Link href="/profile" className="flex px-[20%] py-1
             gap-1 items-center justify-start cursor-pointer
             hover:bg-bg-2 rounded-sm">
-            <TbUser size={24} className="stroke-1 
+            <TbUser size={24} className="text-text 
             group-hover:stroke-[1.5]"/>
             <span className="group-hover:font-normal">
                 Ver perfil
@@ -61,7 +61,7 @@ const ProfileDropdown = ({user, session}:Iprops) => {
             <Link href="/cart" className="flex px-[20%] py-1
             gap-1 hover:bg-bg-2 items-center justify-start
             cursor-pointer">
-            <TbShoppingCart size={24} className="stroke-1
+            <TbShoppingCart size={24} className="text-text
             group-hover:stroke-[1.5]"/>
             <span className="group-hover:font-normal">
                 Ver Carrinho
@@ -78,10 +78,10 @@ const ProfileDropdown = ({user, session}:Iprops) => {
                 }}>
                     
             {loading ? 
-            <TbLoaderQuarter size={24} className="stroke-1
+            <TbLoaderQuarter size={24} className="text-text
             animate-spin"/>
             :
-            <TbLogout2 size={24} className="stroke-1
+            <TbLogout2 size={24} className="text-text
             group-hover:stroke-[1.5]"/>}
             <span className="group-hover:font-normal">
                 Log out
@@ -96,7 +96,7 @@ const ProfileDropdown = ({user, session}:Iprops) => {
     className="mx-2 p-1 rounded-full shadow-[0_0_0_1px]
     shadow-shadow cursor-pointer hover:shadow-[0_0_0_2px]
     hover:scale-105 hover:[&>svg]:stroke-2">
-        <TbUser size={24} className="stroke-1 color-shadow"/>
+        <TbUser size={24} className="text-text"/>
     </Link>}
     </>
     )

@@ -1,5 +1,7 @@
 import ProductsCategory from "@/components/ProductsCategory";
 import Slider from "@/components/Slider";
+import { ProductForCard } from "@/types/utilityTypes";
+
 
 const listSlides = [
 
@@ -8,12 +10,19 @@ const listSlides = [
 
 ]
 
-export default function Home() {
+interface Iprops {
+
+  searchParams: Promise<{[key:string]:string | string[] | undefined}>
+
+}
+
+export default async function Home ({searchParams}:Iprops) {
 
   return (
     <div className="h-auto w-full flex flex-col gap-2">
         <Slider listSlides={listSlides}/>
-        <ProductsCategory title="Os mais populares"/>
+        <ProductsCategory title="Os mais populares"
+        searchParams={searchParams} slug="popular"/>
     </div>
   );
 }

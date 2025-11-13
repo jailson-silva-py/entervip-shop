@@ -40,7 +40,6 @@ const ClientFormMultiStep = () => {
         
     }
 
-    console.log(data)
 
     return (
     <form className="mx-auto px-4 w-9/10 flex flex-col
@@ -56,7 +55,7 @@ const ClientFormMultiStep = () => {
             items-center cursor-pointer self-end rounded-sm shadow-[0_0_0_2px]
             shadow-shadow hover:bg-fg-hover group">
                 <span className="text-xs">Avançar</span>
-                <TbArrowRight className="stroke-1 group-hover:translate-x-0.5
+                <TbArrowRight className="group-hover:translate-x-0.5
                 duration-300 transition-transform"/>
             </button>
             

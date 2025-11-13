@@ -19,7 +19,7 @@ const ItemExpandable  = ({Icon, name, listCategory}:Iprops) => {
     return(
     <li ref={refElement} 
     className='group group-hover:font-extrabold
-    text-center flex-1 min-w-[60px] max-sm:bg-red-100'>
+    text-center flex-1 min-w-[60px]'>
     <button 
     onClick={() => setVisible(prev => !prev)}
     className="group flex items-center
@@ -31,9 +31,10 @@ const ItemExpandable  = ({Icon, name, listCategory}:Iprops) => {
 
     {visible && 
     
-    <ul className="absolute w-screen h-40 max-w-100 grid grid-cols-2 grid-rows-6
-     gap-2 sm:mx-2 px-4 py-5 overflow-hidden rounded-sm translate-y-full 
-    -bottom-2.5 max-sm:bottom-0 left-0 bg-bg-2 shadow-sm shadow-inset-shadow
+    <ul className="absolute w-screen h-40 max-w-100
+    grid grid-cols-2 grid-rows-6 gap-2 sm:mx-2 px-4 py-5
+    overflow-hidden rounded-sm translate-y-full -bottom-2.5
+    max-sm:bottom-0 left-0 bg-bg-2 shadow-sm shadow-inset-shadow
     [&>li]:cursor-pointer [&>li]:hover:font-normal
     [&>li]:text-start z-10">
 

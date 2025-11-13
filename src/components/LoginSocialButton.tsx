@@ -25,7 +25,7 @@ const arrayIcons = {
 const LoginSocialButon = async ({socialName}:Iprops) => {
 
     const name = FirsLetterUpper(socialName)
-    console.log(name)
+
     return (
 
         <form action={async () => {

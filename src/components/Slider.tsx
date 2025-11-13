@@ -24,7 +24,7 @@ const Slider = ({listSlides}:Iprops) => {
     const [index, setIndex] = useState(1)
     const sliderRef = useRef<HTMLDivElement>(null)
     
-    console.log(index)
+
 
     useEffect(() => {
 
@@ -35,7 +35,7 @@ const Slider = ({listSlides}:Iprops) => {
         const width = element.scrollWidth / listSlides.length
 
         sliderRef.current.scrollTo({left:width * (index - 1), behavior:'smooth'})
-        console.log(width)
+        
     }, [index])
 
     useEffect(() => {
@@ -50,7 +50,7 @@ const Slider = ({listSlides}:Iprops) => {
                     return prev += 1
 
                 })
-                console.log(listSlides.length)
+            
 
             } else {
 

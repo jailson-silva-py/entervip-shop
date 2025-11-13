@@ -1,39 +1,62 @@
+import { getProductById } from "@/actions"
 import Image from "next/image"
-import { TbStar } from "react-icons/tb"
+import Link from "next/link"
+import { Suspense } from "react"
+import { TbLoaderQuarter, TbStar } from "react-icons/tb"
 
-const CardProduct = () => {
+interface Iprops {
+
+    productId:string
+
+}
+
+const Loading = () => (<div className="w-full h-full flex items-center justify-center shadow-shadow shadow-default">
+    <TbLoaderQuarter size={32}/>
+</div>)
+
+
+const CardProduct = async ({productId}:Iprops) => {
+
+    const product = await getProductById(productId)
+    const price = product?.variants[0].price
+    
 
     return (
-
-        <div className="bg-bg flex flex-col gap-1 text-sm
-        font-light tracking-widest
-        shadow-[0_0_0_1px] overflow-hidden shadow-shadow p-2
-        rounded-sm inset-shadow-sm h-67 w-37
+       
+        <Link  href={`/product/${product?.slug}`}
+        className="bg-bg flex flex-col gap-1 text-sm
+        font-light tracking-widest overflow-hidden  p-2 rounded-sm  h-67 w-37
         hover:-translate-y-2 hover:shadow-xl duration-300">
-
+        
         <div className="relative flex-1 min-h-6/10">
-        <Image alt={"product-name"}  src="/product.webp"
-        fill loading="lazy" draggable={false} unselectable="on"/> 
+        
+        <Image alt={product?.name || 'product'} 
+        src={product?.images[0]?.url || "/product.webp"}
+        fill loading="lazy" draggable={false} unselectable="on"/>
+         
         </div>
 
-        <div className="flex-1">
+        <div className="flex-1 flex flex-col gap-0.5">
 
-        <span className="line-clamp-2 ">
-        Produto com um nome aaaaaaaaaaaaaaaaaaa...
+        <span className="line-clamp-2 font-normal">
+        {product?.name}
         </span>
-        <p>de:
+        {price?.compareAt && 
+        <p className="text-xs">de:
         
-            <span className="font-medium"> <del>BRL 50,99</del></span>
-        
-        </p>
-        <p>por: <span className="font-medium">BRL 36,99 </span></p>
+            <span className="font-normal">
+                <del>{price.currency} {String(price?.compareAt)}</del>
+            </span>
+            
+        </p>}
+        <p className="font-medium">por: <span>{price?.currency} {String(price?.amount)}</span></p>
         <div className="flex flex-row gap-1 items-center">
         <TbStar className="fill-fg stroke-[.5]" size={16}/>
         <span className="font-normal">4.6</span>
         </div>
 
         </div>
-        </div>
+        </Link>
 
     )
 
