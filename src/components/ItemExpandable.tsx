@@ -40,7 +40,7 @@ const ItemExpandable  = ({Icon, name, listCategory}:Iprops) => {
 
 
         {listCategory.map((v) => (
-            <li><Link href={makeSlug(v)}>{v}</Link></li>
+            <li key={v}><Link href={makeSlug(v)}>{v}</Link></li>
         ))}
    
     </ul>

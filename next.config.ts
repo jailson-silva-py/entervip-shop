@@ -8,7 +8,8 @@ const nextConfig: NextConfig = {
 
     new URL('https://lh3.googleusercontent.com/**')
 
-  ]}
+  ]},
+  cacheComponents:true
 };
 
 export default nextConfig;

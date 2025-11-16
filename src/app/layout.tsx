@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Rajdhani } from "next/font/google";
 import "./globals.css";
 import NavBar from "@/components/NavBar";
+import { SessionProvider } from "next-auth/react";
 
 const rajdhani = Rajdhani({
 
@@ -20,11 +21,13 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="pt" className="h-full w-full overflow-hidden">
+    <html lang="pt" className="h-full w-full overflow-hidden" suppressHydrationWarning>
       <body
         className={` ${rajdhani.className} bg-bg h-full w-full overflow-x-hidden antialiased`}
-      > 
+      >  
+      <SessionProvider>
         <NavBar/>
+      </SessionProvider>
         {children}
         <footer>Footer</footer>
       </body>

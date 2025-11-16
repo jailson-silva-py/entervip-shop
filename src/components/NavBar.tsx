@@ -3,7 +3,7 @@ import ItemExpandable from "./ItemExpandable"
 import Link from "next/link"
 import Image from "next/image"
 import ProfileDropdown from "./ProfileDropdown"
-import { findUserById } from "@/actions"
+import { Suspense } from "react"
 
 const listCategory = [
          'Brinquedos', 'Cozinha', 'Acessórios', 'Beleza',
@@ -13,10 +13,8 @@ const listCategory = [
      ]
 const NavBar = async () => {
 
-    const data = await findUserById()
 
     return (
-
         <nav 
         className="p-4 w-full bg-fg h-24 relative
         flex flex-col gap-2 justify-center md:px-[10vw] font-light">
@@ -52,8 +50,9 @@ const NavBar = async () => {
             </li>
 
             <li  className="flex ml-auto flex-none justify-end ">
-                <ProfileDropdown user={data?.user} 
-                session={data?.session}/>
+                <Suspense fallback={<p>Loading...</p>}>
+                <ProfileDropdown/>
+                </Suspense>
             </li>
             <li className="flex-none mx-2 max-sm:hidden">
             <Link href="/cart" title="Ver carrinho" className="flex items-center justify-center
@@ -93,7 +92,7 @@ const NavBar = async () => {
             </ul>
 
         </nav>
-
+      
     )
 
 }

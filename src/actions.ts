@@ -1,35 +1,95 @@
-"use server"
-import { auth } from 'auth'
-import { redirect } from 'next/navigation'
-import { unstable_cache } from "next/cache";
+"use server";
+import { cacheLife, cacheTag } from "next/cache";
 import { prisma } from "prisma";
+import { Prisma } from "./generated/prisma/browser";
 
 
 export async function getCategory(slug:string) {
+    "use cache";
 
-    return unstable_cache(async () => await prisma.category.findUnique({
+    cacheTag(`cat:${slug}`)
+    cacheLife({revalidate:1800})
+
+    return prisma.category.findUnique({
 
         where:{slug:slug},
         select:{products:true, name:true}
 
-    }),
-    ['cat', slug],
-    {revalidate:1800, tags:[`cat:${slug}`]}
-    )
+    })
+    
 
+}
+
+export async function getProductsByCategory (slug:string, maxElements:number, page:number, full=false) {
+    "use cache";
+    cacheTag(`prod:${slug}`)
+    cacheLife({revalidate:1800})
+
+  
+    if (!full) {
+
+        const prod = await prisma.product.findMany({
+
+        where:{status:'ACTIVE', categories:{some:{category:{slug}}}},
+        select:{id:true,
+        name:true, images:true, slug:true, 
+        variants:{
+            select:{price:true}
+        },
+
+        },
+        take:maxElements,
+        skip: (page - 1) * maxElements,
+        orderBy:{createdAt:'desc'}
+        })
+
+        const newProd = prod.map((v) => {
+
+            const newPrices = v.variants.map((obj) => ({...obj, price:{...obj.price, amount:obj.price?.amount.toString(), compareAt:obj.price?.compareAt?.toString()}}))
+
+            return {...v, variants:{...newPrices}}
+
+        })
+
+        return newProd
+
+    }
+   
+    const prod = await prisma.product.findMany({
+
+        where:{slug, status:'ACTIVE'},
+        include:{images:true, variants:{
+            include:{price:true}}, brand:true},
+        take:maxElements,
+        skip: (page - 1) * maxElements,
+        orderBy:{createdAt:'desc'}
+    })
+
+    const newProd = prod.map((v) => {
+
+            const newPrices = v.variants.map((obj) => ({...obj, price:{...obj.price, amount:obj.price?.amount.toString(), compareAt:obj.price?.compareAt?.toString()}}))
+
+            return {...v, variants:{...newPrices}}
+
+        })
+
+    return newProd
 }
 
 export async function getProductIdsByCategory(
     slug:string, page:number, pageSize=24) {
     
-    const products = await (unstable_cache(async () => {
+    "use cache";
+    cacheTag(`prod-list:${slug}`)
+    cacheLife({revalidate:1800})
+
     const cat = await prisma.category.findUnique({
-        where:{slug}, select:{id:true}
+    where:{slug}, select:{id:true}
     })
 
     if (!cat) return []
 
-    const products =  await prisma.product.findMany({
+    const products = await prisma.product.findMany({
         
         where:{status:'ACTIVE', categories:{ some: {
             categoryId:cat.id
@@ -41,73 +101,78 @@ export async function getProductIdsByCategory(
         select:{id:true}
     })
 
-    
-    
-    return products
-    }, 
-    ['prod-list', slug, String(page)],
-    {revalidate:1800, tags:[`prod:${slug}`]}
-    ))()
-
     return products
     
 }
 
 export async function countProductsByCategory(slug:string) {
 
-    return (unstable_cache(async () => {
-
-        const products = await prisma.category.findUnique({
+    "use cache";
+    cacheTag(`prod-list:${slug}`)
+    cacheLife({revalidate:1800})
+    const category = await prisma.category.findUnique({
 
             where:{slug:slug},
-            select:{products:{select:{productId:true}}}
+            select:{products:{select:{product:{select:{status:true, id:true}}}}}
             
         })
 
-        return products?.products.length
+    const visibleProducts = category?.products.filter((v) => {
+        const isActive = v.product.status === 'ACTIVE'
+        if (isActive) return true
 
-    }, 
-    ['count-prod', slug], 
-    {revalidate:1800, tags:[`prod:${slug}`]})
-    )()
+    })
     
+
+    return visibleProducts?.length
 }
 
 export async function getProductById(id:string) {
+    "use cache";
 
-    return (unstable_cache(async () => {
+    cacheLife({revalidate:1800})
+    cacheTag(`prod:${id}`)
 
-        return prisma.product.findFirst({
+    const product = await prisma.product.findFirst({
 
-            where:{id},
+            where:{id, status:'ACTIVE'},
             select:{
             name:true, images:true, slug:true, 
                 variants:{
-                    select:{price:true}
+                select:{price:true},
+                
                 }
             
             }
 
-        })
+    })
 
-    }, 
-    ['prod', id],
-    {revalidate:1800, tags:[`prod:${id}`]}))()
+    const newProduct = () => {
+
+            const newPrices = product?.variants.map((obj) => ({...obj, price:{...obj.price, amount:obj.price?.amount.toString(), compareAt:obj.price?.compareAt?.toString()}}))
+
+            return {...product, variants:{...newPrices}}
+
+        }
+    
+    return newProduct()
 
 }
 
 
 
-export async function findUserById() {
+export async function findUserById(userId:string|undefined) {
 
-    const session = await auth()
-    if(!session?.user) return
+    "use cache";
+    cacheTag(`user:${userId}`)
+    cacheLife({revalidate:60*60*24*3})
+    if(!userId) return
     
-
+    
     const user = await prisma.user.findUnique({
-        where:{id:session?.user?.id}})
+        where:{id:userId}})
 
-    return {user, session}
+    return user
 }
 
 export async function name(params:string) {

@@ -1,7 +1,5 @@
 import ProductsCategory from "@/components/ProductsCategory";
 import Slider from "@/components/Slider";
-import { ProductForCard } from "@/types/utilityTypes";
-
 
 const listSlides = [
 
@@ -21,7 +19,7 @@ export default async function Home ({searchParams}:Iprops) {
   return (
     <div className="h-auto w-full flex flex-col gap-2">
         <Slider listSlides={listSlides}/>
-        <ProductsCategory title="Os mais populares"
+        <ProductsCategory pageSize={10} title="Os mais populares"
         searchParams={searchParams} slug="popular"/>
     </div>
   );

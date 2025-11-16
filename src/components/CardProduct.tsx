@@ -1,8 +1,7 @@
 import { getProductById } from "@/actions"
 import Image from "next/image"
 import Link from "next/link"
-import { Suspense } from "react"
-import { TbLoaderQuarter, TbStar } from "react-icons/tb"
+import { TbStar } from "react-icons/tb"
 
 interface Iprops {
 
@@ -10,16 +9,11 @@ interface Iprops {
 
 }
 
-const Loading = () => (<div className="w-full h-full flex items-center justify-center shadow-shadow shadow-default">
-    <TbLoaderQuarter size={32}/>
-</div>)
-
-
 const CardProduct = async ({productId}:Iprops) => {
 
     const product = await getProductById(productId)
     const price = product?.variants[0].price
-    
+   
 
     return (
        
@@ -31,7 +25,8 @@ const CardProduct = async ({productId}:Iprops) => {
         <div className="relative flex-1 min-h-6/10">
         
         <Image alt={product?.name || 'product'} 
-        src={product?.images[0]?.url || "/product.webp"}
+        src={product.images && product?.images[0]?.url ||
+            "/product.webp"}
         fill loading="lazy" draggable={false} unselectable="on"/>
          
         </div>

@@ -1,31 +1,65 @@
 "use client";
+import { findUserById } from "@/actions";
 import { User } from "@/generated/prisma"
 import useOutclickElement from "@/hooks/useOutClick";
-import { Session } from "next-auth"
-import { signOut } from "next-auth/react";
+import { signOut, useSession } from "next-auth/react";
 import Image from "next/image"
 import Link from "next/link"
-import { useState } from "react";
-import { TbFidgetSpinner, TbInnerShadowBottom, TbLoader, TbLoader2, TbLoaderQuarter, TbLogout2, TbShoppingCart, TbUser } from "react-icons/tb"
+import { useEffect, useState } from "react";
+import { TbLoader, TbLoaderQuarter, TbLogout2, TbShoppingCart, TbUser } from "react-icons/tb"
 
 
-interface Iprops {
 
-    user:User | undefined | null,
-    session:Session | undefined
-
-}
-
-const ProfileDropdown = ({user, session}:Iprops) => {
+const ProfileDropdown = () => {
 
     const [open, setOpen] = useState(false)
     const [loading, setLoading] = useState(false)
     const {refElement} = useOutclickElement(() => setOpen(false))
+    const {data:session, status} = useSession()
+    const [user, setUser] = useState<User | null>(null)
 
-    return (
-    <>
-    {user && session ? 
-    <div className="relative" ref={refElement}>
+    useEffect(() => {
+
+        if(!session) return
+        (async () => {
+
+            const us = await findUserById(session?.user?.id)
+
+            us && setUser(us)
+
+        })()
+       
+
+
+    }, [session])
+   
+
+    if(!user && status==='unauthenticated') {
+
+        return (
+    <Link title="Fazer Login" href="login"
+    className="mx-2 p-1 rounded-full shadow-[0_0_0_1px]
+    shadow-shadow cursor-pointer hover:shadow-[0_0_0_2px]
+    hover:scale-105 hover:[&>svg]:stroke-2">
+        <TbUser size={24} className="text-text"/>
+    </Link>
+    )
+    }
+
+    else if (!user && status=='loading') {
+
+        return (
+        <div className="h-10 w-10 mx-2 rounded-full shadow-default
+        shadow-shadow flex items-center justify-center
+        animate-pulse bg-fg-aph cursor-progress"
+        title="Carregando Informações do usuário">
+            <TbLoader size={24} className="opacity-70
+            animate-spin"/>
+        </div>)
+
+    } else if (user && status==="authenticated"){
+
+    return <div className="relative" ref={refElement}>
     <button className="relative  mx-2 h-10 w-10 tracking-widest font-light flex
     flex-col items-center justify-center hover:scale-105 gap-2
     cursor-pointer group" 
@@ -46,6 +80,21 @@ const ProfileDropdown = ({user, session}:Iprops) => {
     before:bg-bg before:h-5 before:w-5 
     before:[clip-path:polygon(0%_100%,100%_100%,50%_50%)]">
 
+        <li className="w-full group overflow-hidden">
+            <p className="font-medium text-center text-sm/snug
+            truncate w-full"
+            title={`email: ${user.email}`}>
+                {user.email}
+            </p>
+            <p className="font-normal text-center truncate w-full
+            text-base/snug"
+            title={`usuário: ${user.name}`}>
+                {user.name}
+            </p>
+
+            
+        </li>
+        <hr className="mx-auto h-1 w-9/10 opacity-10"/>
         <li className="group">
             <Link href="/profile" className="flex px-[20%] py-1
             gap-1 items-center justify-start cursor-pointer
@@ -80,7 +129,7 @@ const ProfileDropdown = ({user, session}:Iprops) => {
             {loading ? 
             <TbLoaderQuarter size={24} className="text-text
             animate-spin"/>
-            :
+            : 
             <TbLogout2 size={24} className="text-text
             group-hover:stroke-[1.5]"/>}
             <span className="group-hover:font-normal">
@@ -91,15 +140,9 @@ const ProfileDropdown = ({user, session}:Iprops) => {
 
     </ul>}
     
-    </div>:
-    <Link title="Fazer Login" href="login"
-    className="mx-2 p-1 rounded-full shadow-[0_0_0_1px]
-    shadow-shadow cursor-pointer hover:shadow-[0_0_0_2px]
-    hover:scale-105 hover:[&>svg]:stroke-2">
-        <TbUser size={24} className="text-text"/>
-    </Link>}
-    </>
-    )
+    </div>
+
+    }
 
 }
 

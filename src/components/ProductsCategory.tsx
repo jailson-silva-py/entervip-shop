@@ -10,7 +10,8 @@ type ProductsCategoryProps =  {
 
     title:string,
     searchParams:Promise<{[key:string]: string | string[] | undefined}>
-    slug:string
+    slug:string,
+    pageSize:number
 } 
 
 const Loading = () => <div className="h-64 w-37 flex items-center
@@ -18,9 +19,8 @@ justify-center shadow-default shadow-shadow bg-bg-2 opacity-80">
 <TbLoader size={32} className="text-text animate-spin"/>
 </div>
 
-const pageSize = 10
 
-const ProductsCategory = async ({searchParams, title, slug}:ProductsCategoryProps) => {
+const ProductsCategory = async ({ searchParams, pageSize, title, slug }:ProductsCategoryProps) => {
     
     const s = await searchParams
     const products = await getProductIdsByCategory(slug, parseInt(s[slug+'-page'] as string || '1'), pageSize)
@@ -37,7 +37,11 @@ const ProductsCategory = async ({searchParams, title, slug}:ProductsCategoryProp
             group-hover:translate-x-2 duration-300 ease-in
             transition-transform"/>
         </Link>
+        <aside>
 
+        
+
+        </aside>
         <ul className="grid place-items-center gap-1
         grid-cols-[repeat(auto-fit,minmax(140px,1fr))]">
 
@@ -54,7 +58,8 @@ const ProductsCategory = async ({searchParams, title, slug}:ProductsCategoryProp
             })}
 
         </ul>
-        <Paginator pageSize={Math.ceil(length / 10)} namePage={slug}/>
+        <Paginator pageSize={Math.ceil(length / 10)}
+        namePage={slug}/>
        
         </div>
        

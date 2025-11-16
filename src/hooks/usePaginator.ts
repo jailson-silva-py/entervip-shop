@@ -3,32 +3,54 @@ import useCustomParams from "./useCustomParams"
 
 const usePaginator = (maxPages:number, key:string) => {
 
-    const [page, setPage] = useState(1)
-    const {params, update} = useCustomParams()
+    const [page, setPage] = useState({page:1, skip:0})
+    const {params, update, pathname, searchParams} = useCustomParams()
+    const identifier = key+'-page'
 
     const nextPage = () => {
 
-        page < maxPages && setPage(prev => ++prev)
+        page.page < maxPages && setPage(prev => ({...prev, page:prev.page+1}))
 
 
     }
 
     useEffect(() => {
 
-        params.set(key+'-page', String(page))
+        if(!searchParams.get(identifier)) return
+        const searchPage = parseInt(searchParams.get(identifier) || '1')
+       
+        if (searchPage <= maxPages && searchPage >= 1) {
+
+            setPage(prev => ({...prev, page:searchPage}))
+
+        }
+
+
+    }, [searchParams.get(identifier)])
+
+    useEffect(() => {
+
+        if (page.page > 4) {
+
+            setPage(prev => 
+                ({...prev, skip:prev.skip+page.page, page:1}))
+
+        }
+
+        params.set(identifier, String(page.page+page.skip))
         update()
 
     }, [page])
 
     const previousPage = () => {
 
-        page > 1  && setPage(prev => --prev)
+        page.page > 1  && setPage(prev => ({...prev, page:prev.page-1}))
 
     }
 
 
 
-    return {previousPage, nextPage, page}
+    return {previousPage, nextPage, page, pathname}
 
 }
 
