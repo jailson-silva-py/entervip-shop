@@ -4,6 +4,7 @@ import { countProductsByCategory, getProductIdsByCategory } from "@/actions";
 import { Suspense } from "react";
 import Paginator from "./Paginator";
 import Link from "next/link";
+import LoadingCard from "./LoadingCard";
 
 
 type ProductsCategoryProps =  {
@@ -11,26 +12,24 @@ type ProductsCategoryProps =  {
     title:string,
     searchParams:Promise<{[key:string]: string | string[] | undefined}>
     slug:string,
-    pageSize:number
+    pageSize:number,
+    customIds?: null | {id:string}[]
 } 
 
-const Loading = () => <div className="h-64 w-37 flex items-center
-justify-center shadow-default shadow-shadow bg-bg-2 opacity-80">
-<TbLoader size={32} className="text-text animate-spin"/>
-</div>
 
 
-const ProductsCategory = async ({ searchParams, pageSize, title, slug }:ProductsCategoryProps) => {
+const ProductsCategory = async (
+    { searchParams, pageSize, title,slug, customIds=null }:ProductsCategoryProps) => {
     
     const s = await searchParams
-    const products = await getProductIdsByCategory(slug, parseInt(s[slug+'-page'] as string || '1'), pageSize)
+    const products = customIds ?? await getProductIdsByCategory(slug, parseInt(s[slug+'-page'] as string || '1'), pageSize)
     const length = await countProductsByCategory(slug) || 1
     
     return (
         
         <div className="p-4 w-screen h-min flex flex-col gap-4">
 
-        <Link href={`/${slug}`} className="w-max flex items-center gap-2 text-2xl
+        <Link href={`/category/${slug}`} className="w-max flex items-center gap-2 text-2xl
         font-thin tracking-widest group hover:font-normal">
            <h1>{title}</h1>
             <TbArrowRight size={24} className="text-text
@@ -50,7 +49,7 @@ const ProductsCategory = async ({ searchParams, pageSize, title, slug }:Products
 
 
                 return <li key={id}>
-                    <Suspense fallback={<Loading/>}>
+                    <Suspense fallback={<LoadingCard/>}>
                     <CardProduct productId={id}/>
                     </Suspense>
                     </li>
@@ -58,7 +57,7 @@ const ProductsCategory = async ({ searchParams, pageSize, title, slug }:Products
             })}
 
         </ul>
-        <Paginator pageSize={Math.ceil(length / 10)}
+        <Paginator pageSize={Math.ceil(length / pageSize)}
         namePage={slug}/>
        
         </div>

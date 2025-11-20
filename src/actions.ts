@@ -1,10 +1,8 @@
 "use server";
 import { cacheLife, cacheTag } from "next/cache";
 import { prisma } from "prisma";
-import { Prisma } from "./generated/prisma/browser";
 
-
-export async function getCategory(slug:string) {
+export async function getCategory(slug:string, minimize=false) {
     "use cache";
 
     cacheTag(`cat:${slug}`)
@@ -12,11 +10,28 @@ export async function getCategory(slug:string) {
 
     return prisma.category.findUnique({
 
-        where:{slug:slug},
-        select:{products:true, name:true}
+        where:{slug},
+        select:{products:!minimize, name:true}
 
     })
     
+
+}
+
+
+export async function getAllCategories(take=5) {
+
+    "use cache";
+    cacheTag('cats')
+    cacheLife({revalidate:1800})
+    
+
+    return prisma.category.findMany({
+        
+        select:{slug:true, name:true},
+        take:take
+
+    })
 
 }
 
@@ -105,6 +120,77 @@ export async function getProductIdsByCategory(
     
 }
 
+export async function getProdIdsMostPopularCategory(slugCat:string, maxElements:number, page:number) {
+    
+    return prisma.product.findMany({
+
+        where:{
+            categories:{
+                some:{
+                    category:{
+                        slug:slugCat
+                    }
+                }
+            },
+            status:'ACTIVE'
+        },
+        orderBy:{reviews:{_count:'desc'}},
+        take:maxElements,
+        skip:(page - 1) * maxElements,
+        select:{id:true}
+    })
+
+}
+
+export async function getProdIdsLowestPriceCategory(slugCat:string, maxElements:number, page:number) {
+    
+
+    const p = await prisma.price.findMany({
+
+    where:{
+        variant:{
+            isActive:true,
+            product:{
+                categories:{
+                    some:{
+                        category:{
+                            slug:slugCat
+                        }
+                    }
+                }
+            }
+        }
+    },
+    orderBy:{amount:'asc'},
+    select:{variant:{select:{productId:true}}}
+
+
+    })
+
+    return p.slice((page - 1) * maxElements, page * maxElements - 1)
+}
+
+export async function getProdIdsNewsCategory(slugCat:string, maxElements:number, page:number) {
+    
+    return prisma.product.findMany({
+
+        where:{
+            categories:{
+                some:{
+                    category:{
+                        slug:slugCat
+                    }
+                }
+            }
+        },
+        orderBy:{createdAt:'desc'},
+        take:maxElements,
+        skip:(page - 1) * maxElements,
+        select:{id:true}
+    })
+
+}
+
 export async function countProductsByCategory(slug:string) {
 
     "use cache";
@@ -159,13 +245,112 @@ export async function getProductById(id:string) {
 
 }
 
+export async function getBrandsForCategory(slug:string) {
+    "use cache";
+    cacheTag(`brand:${slug}`)
+    cacheLife({revalidate:1800})
+    const brands = await prisma.brand.findMany({
+    
+        where:{
+            products:{
+                some:{
+                    categories:{
+                        some:{
+                            category:{slug}
+                        }
+                    }
+                }
+            },
+        
 
+    }})
+
+
+    return brands
+
+}
+
+export async function getBrandsForCategoryClient(search:string) {
+
+    const brands = await prisma.brand.findMany({
+    
+        where:{
+            products:{
+                some:{
+                    searchText:{
+
+                        contains:search.toLocaleLowerCase().trim()
+                    }
+                }
+            },
+        
+
+    }})
+
+
+    return brands
+
+}
+
+interface valueObjType {
+    min:string | undefined,
+    max:string | undefined,
+}
+
+export async function filterProducts(brandSlug?:string, classification?:string,
+    valueObj?:valueObjType, searchText?:string) {
+    
+    const maxClassification = classification ? Math.min(parseInt(classification) + 1, 5): undefined
+    const minClassification = classification ? parseInt(classification) - 1 : undefined
+    const newValueObj = {
+        min:valueObj?.min ? parseInt(valueObj.min):undefined,
+        max:valueObj?.max ? parseInt(valueObj.max):undefined}
+
+    const products = await prisma.product.findMany({
+
+        where:{
+            searchText:{
+            contains:searchText
+            }, 
+            status:'ACTIVE',
+            brand:{slug:brandSlug},
+            reviews:{
+                every:{
+                    rating:{
+                        gte:minClassification,
+                        lte:maxClassification
+                    }
+                }
+            },
+            variants:{
+                some:{
+                    price:{
+                        amount:{
+
+                            
+                            gte:newValueObj?.min,
+                            lte:newValueObj?.max,
+
+                            
+                        }
+                    }
+                }
+            }
+        },
+        include:{variants:{include:{price:true}}},
+        
+    })
+
+    return products
+
+}
 
 export async function findUserById(userId:string|undefined) {
 
-    "use cache";
+    "use cache: private";
+
     cacheTag(`user:${userId}`)
-    cacheLife({revalidate:60*60*24*3})
+    cacheLife({stale:60*15})
     if(!userId) return
     
     
@@ -173,8 +358,4 @@ export async function findUserById(userId:string|undefined) {
         where:{id:userId}})
 
     return user
-}
-
-export async function name(params:string) {
-    
 }

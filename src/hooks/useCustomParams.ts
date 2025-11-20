@@ -14,7 +14,7 @@ const useCustomParams = () => {
 
     }
 
-    return {update, searchParams, params, pathname}
+    return {update, searchParams, params, pathname, router}
 
 
 }

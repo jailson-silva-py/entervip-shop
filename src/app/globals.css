@@ -15,12 +15,16 @@
     height: 0;
   }
 
+  .validator-text{@apply text-[10px] text-wrap hyphens-auto
+    wrap-break-word font-normal text-red-700}
+
 
 }
 
 @layer base {
 
   svg {@apply stroke-1;}
+  body {@apply text-text}
 
 }
 
@@ -32,10 +36,11 @@
   --color-bg: oklch(0.898 0.0151 55.05);
   --color-bg-hover: oklch(0.7 0.0151 55.05);
   --color-bg-2: oklch(0.88 0.0151 55.05);
-  --color-text: oklch(0.111 0 5.32);
+  --color-text: oklch(0.3 0 5.32);
   --color-text-hover: oklch(0.333 0 5.32);
   --color-shadow: oklch(0.111 0 5.32 / 20%);
   --shadow-default: 0 0 0 1px var(--tw-shadow-color);
+  --shadow-default-2: 0 0 0 2px var(--tw-shadow-color);
   --shadow-default-xs: 0 0 0 3px var(--tw-shadow-color);
   --animate-show: .5s show ease-in-out;
   --animate-max-width: .5s ease-out max-width;

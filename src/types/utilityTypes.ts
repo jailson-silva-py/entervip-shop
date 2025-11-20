@@ -7,3 +7,6 @@ export type ProductForCard =   Prisma.ProductGetPayload<{
     variants: { include: { price: true } }
   }
 }>
+
+
+export type searchParams = Promise<{[key:string]: string | string[] | undefined}>

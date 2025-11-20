@@ -8,5 +8,5 @@ export const makeSlug = (s:string) => {
 
 export const firstLetterUpper = (s:string) => {
 
-    return s[0].toLocaleUpperCase() + s.substring(1, s.length - 1)
+    return s[0].toLocaleUpperCase() + s.substring(1, s.length)
 }
