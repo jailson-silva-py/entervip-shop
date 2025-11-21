@@ -122,6 +122,10 @@ export async function getProductIdsByCategory(
 
 export async function getProdIdsMostPopularCategory(slugCat:string, maxElements:number, page:number) {
     
+    "use cache";
+    cacheTag(`prod-list:${slugCat}`)
+    cacheLife({revalidate:1800})
+
     return prisma.product.findMany({
 
         where:{
@@ -144,33 +148,32 @@ export async function getProdIdsMostPopularCategory(slugCat:string, maxElements:
 
 export async function getProdIdsLowestPriceCategory(slugCat:string, maxElements:number, page:number) {
     
-
-    const p = await prisma.price.findMany({
+    /* sem filtragem de preço por enquanto (até encontrar uma forma que
+       não seja "gambiarra"*/
+    "use cache";
+    cacheTag(`prod-list:${slugCat}`)
+    cacheLife({revalidate:1800})
+    return prisma.product.findMany({
 
     where:{
-        variant:{
-            isActive:true,
-            product:{
-                categories:{
-                    some:{
-                        category:{
-                            slug:slugCat
-                        }
-                    }
+        categories:{
+            some:{
+                category:{slug:slugCat
+
                 }
             }
         }
     },
-    orderBy:{amount:'asc'},
-    select:{variant:{select:{productId:true}}}
-
+    select:{id:true}
 
     })
-
-    return p.slice((page - 1) * maxElements, page * maxElements - 1)
 }
 
 export async function getProdIdsNewsCategory(slugCat:string, maxElements:number, page:number) {
+    
+    "use cache";
+    cacheTag(`prod-list:${slugCat}`)
+    cacheLife({revalidate:1800})
     
     return prisma.product.findMany({
 

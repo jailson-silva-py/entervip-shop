@@ -24,7 +24,7 @@ const ItemExpandable  = ({Icon, name, listCategory}:Iprops) => {
     onClick={() => setVisible(prev => !prev)}
     className="group flex items-center
     justify-center appearance-none border-none cursor-pointer
-    bg-transparent hover:[&>svg]:stroke-2 hover:font-normal ">
+    bg-transparent hover:[&>svg]:stroke-2 hover:font-normal">
         <span>{name}</span>
         {Icon}
     </button>

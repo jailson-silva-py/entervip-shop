@@ -1,7 +1,8 @@
-import { countProductsByCategory, getCategory, getProductsByCategory } from "@/actions"
+import { countProductsByCategory, getCategory, getProdIdsMostPopularCategory, getProductsByCategory } from "@/actions"
 import CardProduct from "@/components/CardProduct"
 import LoadingCard from "@/components/LoadingCard"
 import Paginator from "@/components/Paginator"
+import ProductsCategory from "@/components/ProductsCategory"
 import { Suspense } from "react"
 
 interface Iprops {
@@ -16,37 +17,40 @@ const Category = async ({searchParams, params}:Iprops) => {
     const { category:slug } = await params
     const category = await getCategory(slug, true)
     const filter = await searchParams
-    const products = await getProductsByCategory(slug, pageSize,
-    parseInt(filter[slug+'-'+'page'] || '1'))
-    const length = await countProductsByCategory(slug)
+    console.log(category)
     
     return (
-        <div className="p-4 flex flex-col gap-4">
+        <div className="p-4 flex flex-col gap-2 tracking-widest">
         
-        
-        <div className="flex flex-col gap-4 p-2">
-        <h1 className="text-5xl text-center my-4 font-bold">
-            {category?.name}
+        <h1 className="text-5xl text-center font-medium my-6">
+            {category?.name ?? slug.toUpperCase()}
         </h1>
-        <ul className="grid place-items-center gap-1
-        grid-cols-[repeat(auto-fit,minmax(140px,1fr))]">
+        
+        <ProductsCategory pageSize={pageSize} searchParams={searchParams}
+        slug={slug} title="Os mais populares" namePage="popular"
+        customIds={getProdIdsMostPopularCategory(slug, pageSize,
+            parseInt(filter["popular-page"] || '1')
+        )}/>
+        
+        <ProductsCategory pageSize={pageSize} searchParams={searchParams}
+        slug={slug} title="Maiores avaliações" namePage="most-reviews"
+        customIds={getProdIdsMostPopularCategory(slug, pageSize, 
+            parseInt(filter["most-reviews-page"] || '1')
+        )}/>
 
-        {products.map((product) => {
+        <ProductsCategory pageSize={pageSize} searchParams={searchParams}
+        slug={slug} title="Mais baratos" namePage="lowest-price"
+        customIds={getProdIdsMostPopularCategory(slug, pageSize, 
+            parseInt(filter["lowest-price-page"] || '1')
+        )}/>
 
-            return <li key={product.slug}>
+        <ProductsCategory pageSize={pageSize} searchParams={searchParams}
+        slug={slug} title="Novidades" namePage="news"
+        customIds={getProdIdsMostPopularCategory(slug, pageSize, 
+            parseInt(filter["news-page"] || '1')
+        )}/>
+   
 
-            <Suspense fallback={<LoadingCard/>}>
-                <CardProduct productId={product.id}/>
-            </Suspense>
-
-            </li>
-
-        })}
-
-        </ul>
-        <Paginator namePage={slug} pageSize={
-            length ? Math.ceil(length/pageSize): 1} />
-        </div>
         </div>
 
     )
