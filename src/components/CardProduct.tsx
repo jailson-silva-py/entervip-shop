@@ -26,7 +26,7 @@ const CardProduct = async ({productId}:Iprops) => {
         
         <Image alt={product?.name || 'product'} 
         src={product.images && product?.images[0]?.url ||
-            "/product.webp"}
+            "/not-found.png"}
         fill loading="lazy" draggable={false} unselectable="on"/>
          
         </div>

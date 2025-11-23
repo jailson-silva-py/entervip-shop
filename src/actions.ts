@@ -1,6 +1,7 @@
 "use server";
 import { cacheLife, cacheTag } from "next/cache";
 import { prisma } from "prisma";
+import { ProductForCard, ProductFullForPage } from "./types/utilityTypes";
 
 export async function getCategory(slug:string, minimize=false) {
     "use cache";
@@ -174,7 +175,7 @@ export async function getProdIdsNewsCategory(slugCat:string, maxElements:number,
     "use cache";
     cacheTag(`prod-list:${slugCat}`)
     cacheLife({revalidate:1800})
-    
+
     return prisma.product.findMany({
 
         where:{
@@ -216,7 +217,9 @@ export async function countProductsByCategory(slug:string) {
     return visibleProducts?.length
 }
 
-export async function getProductById(id:string) {
+export async function getProductById<T extends boolean>
+(id:string, full:T=false as T): 
+Promise<T extends false ? ProductForCard : ProductFullForPage> {
     "use cache";
 
     cacheLife({revalidate:1800})
@@ -230,7 +233,10 @@ export async function getProductById(id:string) {
                 variants:{
                 select:{price:true},
                 
-                }
+                },
+                description:full,
+                reviews:full,
+                brand:full
             
             }
 
@@ -239,8 +245,8 @@ export async function getProductById(id:string) {
     const newProduct = () => {
 
             const newPrices = product?.variants.map((obj) => ({...obj, price:{...obj.price, amount:obj.price?.amount.toString(), compareAt:obj.price?.compareAt?.toString()}}))
-
-            return {...product, variants:{...newPrices}}
+            const obj = {...product, variants:newPrices}
+            return obj as T extends false ? ProductForCard : ProductFullForPage
 
         }
     

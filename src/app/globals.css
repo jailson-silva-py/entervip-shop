@@ -16,8 +16,14 @@
   }
 
   .validator-text{@apply text-[10px] text-wrap hyphens-auto
-    wrap-break-word font-normal text-red-700}
+    wrap-break-word font-normal text-red-700;}
 
+  
+}
+
+@utility mix-light {
+
+  background:color-mix(in oklch, var(--tw-bg-color 90%, white 10%));
 
 }
 
@@ -42,6 +48,7 @@
   --shadow-default: 0 0 0 1px var(--tw-shadow-color);
   --shadow-default-2: 0 0 0 2px var(--tw-shadow-color);
   --shadow-default-xs: 0 0 0 3px var(--tw-shadow-color);
+  --shadow-comment: -2px 0 0 0 var(--tw-shadow-color);
   --animate-show: .5s show ease-in-out;
   --animate-max-width: .5s ease-out max-width;
 
