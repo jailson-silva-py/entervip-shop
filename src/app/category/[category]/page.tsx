@@ -20,37 +20,36 @@ const Category = async ({searchParams, params}:Iprops) => {
     console.log(category)
     
     return (
-        <div className="p-4 flex flex-col gap-2 tracking-widest">
+        <div className="py-20 flex flex-col gap-2 tracking-widest">
         
-        <h1 className="text-5xl text-center font-medium my-6">
+        <h1 className="text-5xl text-center font-medium my-10">
             {category?.name ?? slug.toUpperCase()}
         </h1>
-        
+        <hr className="opacity-5 w-8/10 mx-auto"/>
         <ProductsCategory pageSize={pageSize} searchParams={searchParams}
         slug={slug} title="Os mais populares" namePage="popular"
         customIds={getProdIdsMostPopularCategory(slug, pageSize,
             parseInt(filter["popular-page"] || '1')
         )}/>
-        
+        <hr className="opacity-5 w-8/10 mx-auto"/>
         <ProductsCategory pageSize={pageSize} searchParams={searchParams}
         slug={slug} title="Maiores avaliações" namePage="most-reviews"
         customIds={getProdIdsMostPopularCategory(slug, pageSize, 
             parseInt(filter["most-reviews-page"] || '1')
         )}/>
-
+        <hr className="opacity-5 w-8/10 mx-auto"/>
         <ProductsCategory pageSize={pageSize} searchParams={searchParams}
         slug={slug} title="Mais baratos" namePage="lowest-price"
         customIds={getProdIdsMostPopularCategory(slug, pageSize, 
             parseInt(filter["lowest-price-page"] || '1')
         )}/>
-
+        <hr className="opacity-5 w-8/10 mx-auto"/>
         <ProductsCategory pageSize={pageSize} searchParams={searchParams}
         slug={slug} title="Novidades" namePage="news"
         customIds={getProdIdsMostPopularCategory(slug, pageSize, 
             parseInt(filter["news-page"] || '1')
         )}/>
    
-
         </div>
 
     )

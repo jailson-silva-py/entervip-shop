@@ -18,9 +18,10 @@ const CardProduct = async ({productId}:Iprops) => {
     return (
        
         <Link  href={`/product/${productId}`}
-        className="bg-bg flex flex-col gap-1 text-sm
-        font-light tracking-widest overflow-hidden  p-2 rounded-sm  h-67 w-37
-        hover:-translate-y-2 hover:shadow-xl duration-300">
+        className="bg-bg-accent flex flex-col gap-1 text-sm
+        font-light tracking-widest overflow-hidden  p-2 rounded-sm h-67 w-37
+        hover:-translate-y-2 hover:shadow-xl duration-300
+        shadow-xs shadow-shadow">
         
         <div className="relative flex-1 min-h-6/10">
         
