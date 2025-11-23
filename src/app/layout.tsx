@@ -3,6 +3,7 @@ import { Rajdhani } from "next/font/google";
 import "./globals.css";
 import NavBar from "@/components/NavBar";
 import { SessionProvider } from "next-auth/react";
+import Footer from "@/components/Footer";
 
 const rajdhani = Rajdhani({
 
@@ -29,7 +30,7 @@ export default function RootLayout({
         <NavBar/>
       </SessionProvider>
         {children}
-        <footer>Footer</footer>
+        <Footer/>
       </body>
     </html>
   );

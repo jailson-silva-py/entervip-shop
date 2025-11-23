@@ -12,7 +12,7 @@ const ProductPage = async ({params}:{params:Promise<{id:string}>}) => {
 
     return (
         <div className="mx-auto my-20 max-w-300 py-16 px-8 flex flex-col gap-4
-        tracking-widest font-light mix-light ">
+        tracking-widest font-light bg-bg-accent">
         <div className=" w-full flex gap-16 p-4
         flex-row max-md:flex-col max-md:items-center h-full">
             <ImagesProduct product={product as any}/>
@@ -39,12 +39,12 @@ const ProductPage = async ({params}:{params:Promise<{id:string}>}) => {
                 {price?.currency} {price?.amount}
             </span>
             
-            <button className="bg-fg w-full max-w-75 py-2 px-4 rounded-sm
+            <button className="bg-linear-210 from-fg to-fg-aph w-full max-w-75 py-2 px-4 rounded-sm
             font-medium cursor-pointer shadow-default shadow-shadow
             hover:brightness-98 hover:scale-105">
                 Comprar agora
             </button>
-            <button className="bg-bg shadow-default w-full max-w-75
+            <button className="bg-linear-210 from-gold to-gold-aph shadow-default w-full max-w-75
             shadow-fg-aph py-2 px-4 rounded-sm font-medium
             cursor-pointer hover:brightness-98 hover:scale-105">
                 Adicionar ao carrinho

@@ -21,11 +21,6 @@
   
 }
 
-@utility mix-light {
-
-  background:color-mix(in oklch, var(--tw-bg-color 90%, white 10%));
-
-}
 
 @layer base {
 
@@ -40,7 +35,9 @@
   --color-fg-aph: oklch(0.6824 0.0852 55.05 / 60%);
   --color-fg-hover: oklch(0.64 0.0852 55.05);  
   --color-bg: oklch(0.898 0.0151 55.05);
-  --color-bg-hover: oklch(0.7 0.0151 55.05);
+  --color-bg-accent: oklch(0.92 0.0151 55.05);
+  --color-gold: oklch(0.7894 0.1464 70.64);
+  --color-gold-aph: oklch(0.7894 0.1464 70.64 / 30%);
   --color-bg-2: oklch(0.88 0.0151 55.05);
   --color-text: oklch(0.3 0 5.32);
   --color-text-hover: oklch(0.333 0 5.32);

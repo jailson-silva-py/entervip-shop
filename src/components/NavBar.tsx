@@ -4,13 +4,9 @@ import Link from "next/link"
 import Image from "next/image"
 import ProfileDropdown from "./ProfileDropdown"
 import { Suspense } from "react"
+import { listCategoryObj } from "@/utils/listCategory"
 
-const listCategory = [
-         'Brinquedos', 'Cozinha', 'Acessórios', 'Beleza',
-         'Eletrônicos', 'Moda', 'Esporte & Fitness',
-         'Papelaria & Escritório', 'Pet Shop', 'Automotivo',
-         'Móveis', 'Jardim & Varanda',
-     ]
+
 const NavBar = async () => {
 
 
@@ -73,7 +69,7 @@ const NavBar = async () => {
                 <ItemExpandable name="Categorias"
                 Icon={<TbChevronDown size={18} 
                 className="text-text"/>}
-                listCategory={listCategory}/>
+                listCategory={listCategoryObj}/>
 
 
                 <li className="text-center cursor-pointer flex-1

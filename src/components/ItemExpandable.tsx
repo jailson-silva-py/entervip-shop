@@ -1,14 +1,13 @@
 "use client";
 import useOutclickElement from '@/hooks/useOutClick';
 import { JSX, useState } from 'react'
-import { makeSlug } from '@/utils/slugUtil';
 import Link from 'next/link';
 
 interface Iprops  {
 
     Icon:JSX.Element,
     name:string,
-    listCategory:string[]
+    listCategory:{name:string, slug:string}[]
 
 }
 
@@ -40,9 +39,9 @@ const ItemExpandable  = ({Icon, name, listCategory}:Iprops) => {
 
 
         {listCategory.map((v) => (
-            <li key={v}>
-            <Link href={`/category/${makeSlug(v)}`}>
-            {v}
+            <li key={v.slug}>
+            <Link href={`/category/${v.slug}`}>
+            {v.name}
             </Link>
             </li>
         ))}

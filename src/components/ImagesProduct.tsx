@@ -70,7 +70,7 @@ const ImagesProduct = ({product}:ImagesProductProps) => {
     {openModal &&
     <div className="fixed flex inset-0
     w-screen h-screen backdrop-blur-sm border-2
-    z-10 justify-center items-center mix-ligth ">
+    z-10 justify-center items-center">
 
         <button className="absolute p-2 right-5 top-2 
         rounded-full cursor-pointer hover:[&>svg]:scale-115"
