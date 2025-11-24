@@ -1,4 +1,6 @@
-import { Prisma } from "@prisma/client"
+import { getCartItemsByUserId } from "@/actions";
+import { Prisma } from "@/generated/prisma/browser";
+import { PromiseReturnType } from "@prisma/client/extension";
 
 
 export type ProductForCard =   {
@@ -12,6 +14,7 @@ export type ProductForCard =   {
     }[];
     slug: string;
     variants: {
+        id:string,
         price: {
             variantId: string;
             currency: string;
@@ -31,6 +34,7 @@ export type ProductFullForPage = {
         position: number;
     }[];
     variants: {
+        id:string,
         price: {
             variantId: string;
             currency: string;
@@ -57,6 +61,40 @@ export type ProductFullForPage = {
         slug: string;
     } | null;
 }
+
+export type CartItemForCart = Prisma.CartItemGetPayload<{
+  
+        include:{
+            cart:true,
+            variant:{
+                select:{
+                    productId:true,
+                    id:true,
+                    inventory:{
+                        select:{
+                            reserved:true, quantity:true
+                        }
+                    },
+                    price:{
+                        select:{
+                            amount:true, currency:true
+                        }
+                    }, product:{
+                        select:{
+                            name:true,
+                            images:{
+                                select:{
+                                    url:true
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+}>
+
+export type CartItemsForCart =  CartItemForCart[]
 
 
 export type searchParams = Promise<{[key:string]: string | string[] | undefined}>

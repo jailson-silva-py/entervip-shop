@@ -7,7 +7,7 @@ const Footer = () => {
 
     return (
 
-        <footer className="relative flex gap-4 px-[20vw] py-26 bg-bg-2
+        <footer className="relative mt-32 flex gap-4 px-[20vw] py-26 bg-bg-2
         tracking-widest max-md:flex-col font-light">
             <div className="absolute inset-0 h-px bg-text w-full opacity-20"/>
             <div className="flex-1">
@@ -84,14 +84,22 @@ const Footer = () => {
                 ))}
                 </ul>
             </div>
-            
-        <p className="absolute max-w-max w-8/10 bottom-3 left-5/10
-        -translate-x-5/10 hyphens-auto wrap-break-word text-sm">
-            © {new Date().getFullYear()} Slayer – Projeto de portfólio. Todos os direitos reservados.
-        </p>
+            <Copyright/>
+       
         </footer>
 
     )
+
+}
+
+const Copyright = async () => {
+    "use cache: remote"
+     return (
+     <p className="absolute max-w-max w-8/10 bottom-3 left-5/10
+        -translate-x-5/10 hyphens-auto wrap-break-word text-sm">
+            © {new Date().getFullYear()} Slayer – Projeto de portfólio. Todos os direitos reservados.
+    </p>
+     )
 
 }
 

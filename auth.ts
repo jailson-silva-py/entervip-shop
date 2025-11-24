@@ -21,6 +21,32 @@ export const { handlers, signIn, signOut, auth }  = NextAuth({
 
            return session
 
+        },
+
+        async signIn({user}) {
+
+
+            if (user.id) {
+
+                const existingCart = await prisma.cart.findUnique({
+                    where:{
+                        userId:user.id
+                    }
+                })
+
+                if (!existingCart) {
+
+                    await prisma.cart.create({
+
+                        data:{userId:user.id}
+
+                    })
+
+                }
+
+            }
+
+            return true
         }
 
     }

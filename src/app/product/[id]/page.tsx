@@ -1,15 +1,15 @@
-import { getProductById } from "@/actions"
+import { addProductToCart, getCartIdAndUserId, getProductById } from "@/actions"
 import Comments from "@/components/Comments"
 import ImagesProduct from "@/components/ImagesProduct"
-import { TbStar } from "react-icons/tb"
+import { BtnAction } from "@/components/BtnAction"
 
 const ProductPage = async ({params}:{params:Promise<{id:string}>}) => {
 
     const { id } = await params
     const product = await getProductById(id, true)
     const price = product.variants[0].price
+    const {userId, cartId} = await getCartIdAndUserId()
     
-
     return (
         <div className="mx-auto my-20 max-w-300 py-16 px-8 flex flex-col gap-4
         tracking-widest font-light bg-bg-accent">
@@ -39,16 +39,18 @@ const ProductPage = async ({params}:{params:Promise<{id:string}>}) => {
                 {price?.currency} {price?.amount}
             </span>
             
-            <button className="bg-linear-210 from-fg to-fg-aph w-full max-w-75 py-2 px-4 rounded-sm
-            font-medium cursor-pointer shadow-default shadow-shadow
-            hover:brightness-98 hover:scale-105">
-                Comprar agora
-            </button>
-            <button className="bg-linear-210 from-gold to-gold-aph shadow-default w-full max-w-75
-            shadow-fg-aph py-2 px-4 rounded-sm font-medium
-            cursor-pointer hover:brightness-98 hover:scale-105">
-                Adicionar ao carrinho
-            </button>
+
+            <BtnAction text="Comprar" variantBtn="grad-fg-fg-aph"/>
+            
+            <form action={async () => {
+                "use server"
+            await addProductToCart(userId, cartId as string,
+            product.variants[0]?.id)
+
+            }}>
+            <BtnAction text="Adicionar ao carrinho" 
+            variantBtn="grad-gold-gold-aph"/>
+            </form>
 
             </div>
             

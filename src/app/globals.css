@@ -15,6 +15,12 @@
     height: 0;
   }
 
+  .no-number-btns::inp {
+
+
+
+  }
+
   .validator-text{@apply text-[10px] text-wrap hyphens-auto
     wrap-break-word font-normal text-red-700;}
 
@@ -26,13 +32,18 @@
 
   svg {@apply stroke-1;}
   body {@apply text-text}
+  input[type="number"]::-webkit-outer-spin-button,
+  input[type="number"]::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+  }
 
 }
 
 @theme {
 
   --color-fg: oklch(0.6824 0.0852 55.05);
-  --color-fg-aph: oklch(0.6824 0.0852 55.05 / 60%);
+  --color-fg-aph: oklch(0.6824 0.0852 55.05 / 30%);
   --color-fg-hover: oklch(0.64 0.0852 55.05);  
   --color-bg: oklch(0.898 0.0151 55.05);
   --color-bg-accent: oklch(0.92 0.0151 55.05);

@@ -5,10 +5,10 @@ import Image from "next/image"
 import ProfileDropdown from "./ProfileDropdown"
 import { Suspense } from "react"
 import { listCategoryObj } from "@/utils/listCategory"
+import { countCartItemsByUserId } from "@/actions"
 
 
 const NavBar = async () => {
-
 
     return (
         <nav 
@@ -51,13 +51,7 @@ const NavBar = async () => {
                 </Suspense>
             </li>
             <li className="flex-none mx-2 max-sm:hidden">
-            <Link href="/cart" title="Ver carrinho" className="flex items-center justify-center
-            ml-auto p-1 rounded-sm w-max h-full cursor-pointer">
-                
-                <TbShoppingCart size={32} 
-                className="text-text stroke-[0.5] hover:stroke-[1.5]"/>
-
-            </Link>
+                <CartLink/>
             </li>
 
             </ul>
@@ -91,6 +85,34 @@ const NavBar = async () => {
       
     )
 
+}
+
+const CartLink = async () => {
+
+    const cartItem = await countCartItemsByUserId()
+
+    return (
+    <Suspense fallback={
+    <div className="p-1 rounded-full h-5  min-w-5 font-normal
+        bg-text text-bg absolute top-0 -translate-y-2/10 -right-3
+        flex items-center justify-center">
+            <div className="h-2 w-2 bg-bg-2 animate-pulse
+            opacity-50"/>
+    </div> }>
+    <Link href="/cart" title="Ver carrinho"
+        className="relative flex items-center justify-center
+        ml-auto p-1 rounded-sm w-max h-full cursor-pointer">
+                
+        <TbShoppingCart size={32} 
+        className="text-text stroke-[0.5] hover:stroke-[1.5]"/>
+        <div className="p-1 rounded-full h-5  min-w-5 font-normal
+        bg-text text-bg absolute top-0 -translate-y-2/10 -right-3
+        flex items-center justify-center">
+            {cartItem > 99 ? "99+":cartItem}
+        </div>  
+    </Link>
+    </Suspense>
+    )
 }
 
 export default NavBar

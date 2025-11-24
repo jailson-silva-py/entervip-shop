@@ -1,7 +1,9 @@
 "use server";
-import { cacheLife, cacheTag } from "next/cache";
+import { cacheLife, cacheTag, updateTag } from "next/cache";
 import { prisma } from "prisma";
-import { ProductForCard, ProductFullForPage } from "./types/utilityTypes";
+import { CartItemForCart, ProductForCard, ProductFullForPage } from "./types/utilityTypes";
+import { auth } from "auth";
+import { redirect } from "next/navigation";
 
 export async function getCategory(slug:string, minimize=false) {
     "use cache";
@@ -231,7 +233,7 @@ Promise<T extends false ? ProductForCard : ProductFullForPage> {
             select:{
             name:true, images:true, slug:true, 
                 variants:{
-                select:{price:true},
+                select:{id:true, price:true},
                 
                 },
                 description:full,
@@ -351,6 +353,218 @@ export async function filterProducts(brandSlug?:string, classification?:string,
     })
 
     return products
+
+}
+
+export async function getVariantsById(ids:string[]) {
+    
+    return prisma.productVariant.findMany({
+
+        where:{id:{in:ids}, isActive:true},
+        include:{
+            inventory:{
+                select:{
+                    quantity:true,
+                    reserved:true
+                }
+            },
+            product:{
+                select:{
+                    name:true, images:true
+                }
+            },
+            price:{
+                select:{
+                    amount:true,
+                    currency:true
+                }
+            }
+        }
+
+    })
+
+}
+
+export async function getCartIdAndUserId() {
+
+    const session = await auth()
+    if(!session?.user?.id) redirect('/')
+
+    const cart = await prisma.cart.findUnique({
+    where:{userId:session.user.id},
+    select:{id:true}
+    })
+
+    return {userId:session.user.id, cartId:cart?.id}
+
+}
+
+export async function getCartItemsByUserId(page:number, pageSize:number) {
+
+    "use cache: private"
+
+    const session = await auth()
+    if (!session?.user?.id) redirect('/login')
+    cacheTag(`cart:${session?.user?.id}`)
+    cacheLife({revalidate:1800})
+
+    const cartItemsArray = await prisma.cartItem.findMany({
+        where:{
+            cart:{userId:session.user.id},
+        },
+        include:{
+            cart:true,
+            variant:{
+                select:{
+                    id:true,
+                    productId:true,
+                    inventory:{
+                        select:{
+                            reserved:true, quantity:true
+                        }
+                    },
+                    price:{
+                        select:{
+                            amount:true, currency:true
+                        }
+                    }, product:{
+                        select:{
+                            name:true,
+                            images:{
+                                select:{
+                                    url:true
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        take:pageSize,
+        skip:(page - 1) * pageSize,
+
+    })
+
+    cartItemsArray.forEach(value => {
+
+        if(!value.variant.price) return
+        //@ts-ignore
+        value.variant.price.amount = value.variant.price?.amount.toString()
+
+    })
+
+    return cartItemsArray
+
+}
+
+export async function countCartItemsByUserId() {
+    "use cache: private";
+   
+    const session = await auth()
+    if(!session?.user?.id) redirect('/login')
+    cacheTag(`cart:${session?.user?.id}`)
+    cacheLife({revalidate:1800})
+
+    return prisma.cartItem.count({
+
+        where:{cart:{userId:session?.user.id}}
+
+    })
+
+}
+
+
+export async function getFullPricesCartItems(cartId:string, userId:string) {
+
+    "use cache: private"
+    cacheTag(`cart:${userId}`)
+    cacheLife({revalidate:1800})
+    
+    const items = await prisma.cartItem.findMany({
+        where:{
+            cartId, cart:{userId},
+        },
+        select:{qty:true, variant:{select:{price:{select:{amount:true}}}}}
+    })
+
+    items.forEach((value) => {
+        
+        if (!value.variant.price) return 
+        //@ts-ignore
+        value.variant.price.amount = value.variant.price?.amount.toNumber()
+
+    })
+
+    return items as {qty:number, variant:{price:{amount:number}|null}}[]
+
+}   
+
+export async function addProductToCart(userId:string, cartId:string, variantId:string, qty?:number) {
+    
+    try {
+
+    await prisma.cartItem.create({
+        data:{cartId, variantId, qty}
+    })  
+    updateTag(`cart:${userId}`)
+
+    } catch {
+
+    return {error:'Erro ao adicionar item ao carrinho.'}
+
+    }
+   
+
+    
+    
+}
+
+export async function updateQtyCartItem(cartItem:CartItemForCart, qty:number) {
+
+    try {
+        const qtyAvaliable = (cartItem.variant.inventory?.quantity || 0) - (cartItem.variant.inventory?.reserved || 0)
+
+        if (qty <= 0 || qty > qtyAvaliable) {
+
+            return {error:'Quantidade não condizente com estoque.'}
+
+        }
+
+        await prisma.cartItem.update({
+
+            where:{id:cartItem.id, cart:{id:cartItem.cart.id}},
+            data:{qty}
+
+        })
+
+        updateTag(`cart:${cartItem.cart.userId}`)
+
+    } catch {
+
+        return {error:'Erro ao atualizar quantidade do produto.'}
+
+    }
+
+}
+
+export async function deleteProductCart(userId:string, cartId:string, id:string) {
+    
+
+    try {
+
+        await prisma.cartItem.delete({
+
+            where:{id,cartId, cart:{userId}}
+
+        })
+
+        updateTag(`cart:${userId}`)
+
+    } catch(error) {
+
+        return {error:'Erro ao deletar item do carrinho.'}
+
+    }
 
 }
 
