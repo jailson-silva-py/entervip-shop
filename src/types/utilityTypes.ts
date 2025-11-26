@@ -1,7 +1,8 @@
-import { getCartItemsByUserId } from "@/actions";
+import { findUserById } from "@/actions";
 import { Prisma } from "@/generated/prisma/browser";
 import { PromiseReturnType } from "@prisma/client/extension";
 
+export type User = PromiseReturnType<typeof findUserById>
 
 export type ProductForCard =   {
     name: string;

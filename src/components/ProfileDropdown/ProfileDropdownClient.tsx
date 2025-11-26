@@ -1,37 +1,21 @@
 "use client";
-import { findUserById } from "@/actions";
-import { User } from "@/generated/prisma"
 import useOutclickElement from "@/hooks/useOutClick";
-import { signOut, useSession } from "next-auth/react";
+import { User } from "@/types/utilityTypes";
+import { signOut } from "next-auth/react";
 import Image from "next/image"
 import Link from "next/link"
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { TbLoader, TbLoaderQuarter, TbLogout2, TbShoppingCart, TbUser } from "react-icons/tb"
 
 
 
-const ProfileDropdown = () => {
+
+export const ProfileDropdownClient = ({user}:{user:User}) => {
 
     const [open, setOpen] = useState(false)
     const [loading, setLoading] = useState(false)
     const {refElement} = useOutclickElement(() => setOpen(false))
-    const {data:session, status} = useSession()
-    const [user, setUser] = useState<User | null>(null)
 
-    useEffect(() => {
-
-        if(!session) return
-        (async () => {
-
-            const us = await findUserById(session?.user?.id)
-
-            us && setUser(us)
-
-        })()
-       
-
-
-    }, [session])
    
 
     if(!user && status==='unauthenticated') {
@@ -44,20 +28,8 @@ const ProfileDropdown = () => {
         <TbUser size={24} className="text-text"/>
     </Link>
     )
-    }
 
-    else if (!user && status=='loading') {
-
-        return (
-        <div className="h-10 w-10 mx-2 rounded-full shadow-default
-        shadow-shadow flex items-center justify-center
-        animate-pulse bg-fg-aph cursor-progress"
-        title="Carregando Informações do usuário">
-            <TbLoader size={24} className="opacity-70
-            animate-spin"/>
-        </div>)
-
-    } else if (user && status==="authenticated"){
+    } else if (user){
 
     return <div className="relative" ref={refElement}>
     <button className="relative  mx-2 h-10 w-10 tracking-widest font-light flex
@@ -66,7 +38,7 @@ const ProfileDropdown = () => {
     onClick={() => setOpen(prev => !prev)}>
 
         <Image priority alt={`Perfil de ${user.name}`}
-        src={user.image || session.user?.image!}
+        src={user.image || "/not-profile-image.webp"}
         width={50} height={50} className="rounded-full 
         group-hover:shadow-xl shadow-shadow"/>
 
@@ -145,5 +117,3 @@ const ProfileDropdown = () => {
     }
 
 }
-
-export default ProfileDropdown

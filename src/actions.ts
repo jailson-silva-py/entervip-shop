@@ -568,13 +568,25 @@ export async function deleteProductCart(userId:string, cartId:string, id:string)
 
 }
 
-export async function findUserById(userId:string|undefined) {
+export async function findUserById(userId?:string|undefined) {
 
     "use cache: private";
 
     cacheTag(`user:${userId}`)
     cacheLife({stale:60*15})
-    if(!userId) return
+    if(!userId) {
+
+        const session = await auth()
+
+        if(!session?.user) return
+
+        return prisma.user.findUnique({
+            where:{
+                id:session?.user?.id
+            }
+        })
+
+    }
     
     
     const user = await prisma.user.findUnique({

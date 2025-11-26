@@ -31,6 +31,8 @@ export const InputQuantidade = ({qty, qtyAvaliable}:InputQuantidadeProps) => {
     const {refElement} = useOutclickElement(
         () => setEditable(false))
 
+    
+
     return (
     <>
    { editable ?
@@ -41,8 +43,8 @@ export const InputQuantidade = ({qty, qtyAvaliable}:InputQuantidadeProps) => {
    :
    <input defaultValue={qty} type="number"
     placeholder={`1 - ${qtyAvaliable}`}
-    className="shadow-shadow shadow-default px-4 h-8 py-0.5 w-22
-    outline-none rounded-sm text-sm appearance-none"
+    className="shadow-shadow shadow-default px-4 py-0.5 w-22
+    outline-none rounded-sm text-sm h-6  max-md:text-xs appearance-none"
     ref={refElement} autoFocus name="qty" min={1} max={qtyAvaliable}/>
     }
     </>
@@ -54,11 +56,15 @@ export const InputQuantidade = ({qty, qtyAvaliable}:InputQuantidadeProps) => {
     :
     
     <button className="hover:shadow-shadow shadow-default
-    py-0.5 px-4  w-max h-8 rounded-sm text-xs cursor-text" onClick={() => setEditable(true)}>
-        {qty} Unidade{'(s)'}
+    py-0.5 hover:px-4 transition-[padding] duration-300
+    ease-out w-max h-6  rounded-sm text-xs
+    cursor-text font-medium" onClick={() => setEditable(true)}>
+        <span className="mr-1 font-semibold">{qty}</span>
+        Unidade{'(s)'}
     </button>
     
     }
+    <span className="ml-1 items-center hidden max-md:flex text-xs h-6">de<strong className="ml-1">{qtyAvaliable}</strong></span>
     </>
     }
     </>

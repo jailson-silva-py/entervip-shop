@@ -1,11 +1,12 @@
-import { TbChevronDown, TbSearch, TbShoppingCart } from "react-icons/tb"
+import { TbChevronDown, TbLoader, TbSearch, TbShoppingCart } from "react-icons/tb"
 import ItemExpandable from "./ItemExpandable"
 import Link from "next/link"
 import Image from "next/image"
-import ProfileDropdown from "./ProfileDropdown"
+import ProfileDropdown from "./ProfileDropdown/ProfileDropdown"
 import { Suspense } from "react"
 import { listCategoryObj } from "@/utils/listCategory"
 import { countCartItemsByUserId } from "@/actions"
+import { Loading } from "./ProfileDropdown/LoadingProfile"
 
 
 const NavBar = async () => {
@@ -22,7 +23,7 @@ const NavBar = async () => {
             <li className="max-sm:hidden flex-2">
             <Link href="/">
             <Image alt="Logo" src="/logo.png" className="drop-shadow-sm drop-shadow-shadow"
-            width={50} height={50} priority/></Link>
+            width={50} height={50} priority loading="eager"/></Link>
             </li>
             <li className="md:flex-4 flex-5">
             <form action="" className="w-full h-full">
@@ -46,12 +47,16 @@ const NavBar = async () => {
             </li>
 
             <li  className="flex ml-auto flex-none justify-end ">
-                <Suspense fallback={<p>Loading...</p>}>
+                <Suspense fallback={<Loading/>}>
                 <ProfileDropdown/>
                 </Suspense>
+                
+                
             </li>
             <li className="flex-none mx-2 max-sm:hidden">
+                <Suspense fallback={<CartLinkLoader/>}>
                 <CartLink/>
+                </Suspense>
             </li>
 
             </ul>
@@ -92,13 +97,7 @@ const CartLink = async () => {
     const cartItem = await countCartItemsByUserId()
 
     return (
-    <Suspense fallback={
-    <div className="p-1 rounded-full h-5  min-w-5 font-normal
-        bg-text text-bg absolute top-0 -translate-y-2/10 -right-3
-        flex items-center justify-center">
-            <div className="h-2 w-2 bg-bg-2 animate-pulse
-            opacity-50"/>
-    </div> }>
+  
     <Link href="/cart" title="Ver carrinho"
         className="relative flex items-center justify-center
         ml-auto p-1 rounded-sm w-max h-full cursor-pointer">
@@ -111,7 +110,24 @@ const CartLink = async () => {
             {cartItem > 99 ? "99+":cartItem}
         </div>  
     </Link>
-    </Suspense>
+    
+    )
+}
+
+const CartLinkLoader = () => {
+
+
+    return (
+    <div className="relative flex items-center justify-center
+        ml-auto p-1 rounded-sm w-max h-full cursor-pointer">
+            <TbShoppingCart size={32} 
+        className="text-text"/>
+    <div className="p-1 rounded-full h-5  min-w-5 font-normal
+     bg-text text-bg absolute top-0 -translate-y-2/10 -right-3
+    flex items-center justify-center">
+    <TbLoader size={12} className="animate-spin text-bg"/>
+    </div>
+    </div>
     )
 }
 

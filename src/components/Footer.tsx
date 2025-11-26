@@ -11,7 +11,8 @@ const Footer = () => {
         tracking-widest max-md:flex-col font-light">
             <div className="absolute inset-0 h-px bg-text w-full opacity-20"/>
             <div className="flex-1">
-                <Image alt="logo" src={"/logo.png"} width={100} height={100}/>
+                <Image alt="logo" src={"/logo.png"} width={100} height={100}
+                priority loading="eager"/>
                 <h1 className="text-2xl font-bold bg-linear-to-r
                 from-gold to-text bg-clip-text text-transparent
                 drop-shadow-xs drop-shadow-shadow">
