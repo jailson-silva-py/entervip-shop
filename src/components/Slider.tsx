@@ -79,19 +79,18 @@ const Slider = ({listSlides}:Iprops) => {
 
     return (
 
-        <div className="w-screen h-125 relative shadow-[0_0_0_1px] shadow-shadow">
+        <div className="w-screen md:h-[70vh] h-[30vh] relative shadow-[0_0_0_1px] shadow-shadow">
             <div ref={sliderRef} className="overflow-x-hidden h-full w-full"
             >
             <div className="w-max h-full flex " >
 
                 {listSlides.map((v, i) => (
 
-                    <div key={i} className="w-screen h-full flex
-                    items-center justify-center aspect-1/4
-                    sm:aspect-video relative">
+                    <div key={i} className="w-screen h-auto flex
+                    items-center justify-center 
+                     relative">
                         <Image alt={`slide: ${v}`} src={v}
-                        priority  fill sizes="100vw"
-                        className="object-cover object-center"/>
+                        priority  fill sizes="100vw, auto"/>
                     </div>
 
                 ))}
