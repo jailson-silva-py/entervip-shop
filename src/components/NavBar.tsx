@@ -94,7 +94,7 @@ const NavBar = async () => {
 
 const CartLink = async () => {
 
-    const cartItem = await countCartItemsByUserId()
+    const cartItems = await countCartItemsByUserId()
 
     return (
   
@@ -104,11 +104,11 @@ const CartLink = async () => {
                 
         <TbShoppingCart size={32} 
         className="text-text stroke-[0.5] hover:stroke-[1.5]"/>
-        <div className="p-1 rounded-full h-5  min-w-5 font-normal
+        { cartItems && <div className="p-1 rounded-full h-5  min-w-5 font-normal
         bg-text text-bg absolute top-0 -translate-y-2/10 -right-3
         flex items-center justify-center">
-            {cartItem > 99 ? "99+":cartItem}
-        </div>  
+            {cartItems > 99 ? "99+":cartItems}
+        </div>  }
     </Link>
     
     )

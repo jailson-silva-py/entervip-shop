@@ -1,9 +1,12 @@
 "use client"
 import BtnWithLoading from "@/components/BtnWithLoading"
 import useOutclickElement from "@/hooks/useOutClick"
-import { useEffect, useState } from "react"
+import usePaginator from "@/hooks/usePaginator"
+import Link from "next/link"
+import { useSearchParams } from "next/navigation"
+import { RefObject, useRef, useState } from "react"
 import { useFormStatus } from "react-dom"
-import { TbTrash } from "react-icons/tb"
+import { TbChevronsLeft, TbChevronsRight, TbTrash } from "react-icons/tb"
 
 
 export const BtnDelete = () => {
@@ -68,6 +71,80 @@ export const InputQuantidade = ({qty, qtyAvaliable}:InputQuantidadeProps) => {
     </>
     }
     </>
+    )
+
+}
+
+type PaginatorCartProps = {
+    countCartItems:number,
+    pageSize:number
+}
+
+const handleScrollX = (
+refList:RefObject<HTMLUListElement | null>, page:number) => () => {
+
+    if (!refList.current) return
+    const list = refList.current;
+   
+    list.scrollTo({behavior:'smooth',
+        left:(page-2) * 32})
+
+}
+
+export const PaginatorCart = ({countCartItems, pageSize}:PaginatorCartProps) => { 
+    
+    const maxPages = Math.ceil(countCartItems / pageSize)
+    
+    const refListPage = useRef<HTMLUListElement>(null)
+    const search = useSearchParams()
+    const pageSearch = parseInt(search.get('cart-page') || '1')
+    const { page, getLinkPage } = 
+    usePaginator(maxPages, "cart", handleScrollX(refListPage, pageSearch))
+    
+
+    return (
+
+    <div className="relative my-6 flex gap-2 h-9 w-full justify-center items-center">
+        {pageSearch > 2 && <Link href={getLinkPage(1)}
+        className="h-6 w-6 flex items-center justify-center
+        bg-bg-accent hover:brightness-95 text-text text-sm
+        shadow-shadow shadow-default rounded-sm font-semibold">
+            1
+        </Link>}
+
+        <div className="relative h-full">
+        <div className="absolute -bottom-2 left-5/10 -translate-x-5/10 h-1 w-24 rounded-2xl bg-bg-2"/>
+        <ul className="flex px-1 gap-2 w-24 h-full items-center justify-start
+        overflow-hidden"
+        ref={refListPage}>
+        
+        {Array.from({length:maxPages}, (_, k) => {
+
+            return (
+
+            <li key={k} className="h-max">
+            <Link href={getLinkPage(k+1)}
+            className={`flex items-center justify-center w-6 h-6 bg-bg-accent rounded-sm
+            shadow-default hover:brightness-95 font-medium text-sm
+            ${k+1 === page ? "shadow-gold bg-gold-aph":"shadow-shadow"}`}>
+            {k+1}
+            </Link>
+            </li>
+
+            )
+
+        })}
+        </ul>
+        </div>
+
+        { pageSearch < 5 && <Link href={getLinkPage(maxPages)}
+        className="h-6 w-6 flex items-center justify-center
+        bg-bg-accent hover:brightness-95 text-text text-sm
+        shadow-shadow shadow-default rounded-sm font-semibold">
+            {maxPages}
+        </Link>}
+    </div>
+
     )
 
 }

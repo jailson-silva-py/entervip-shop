@@ -14,25 +14,25 @@ interface PaginatorProps {
 const Paginator = ({pageSize, namePage}:PaginatorProps) => {
 
 
-    const {nextPage, page, previousPage, pathname} = usePaginator(pageSize, namePage)
+    const {nextPage, page, previousPage, getLinkPage} = usePaginator(pageSize, namePage)
    
     return (
     <div className="mx-auto mt-2 w-max h-20">
         <p className="flex gap-2 [&>a]:text-cyan-900 
         [&>a]:font-extrabold justify-center">
-            <Link href={`${pathname}?${namePage}-page=1`}>
-            {page.page+page.skip}
+            <Link href={getLinkPage(1)} replace scroll={false}>
+            {page}
             </Link>
             
             <span>de</span>
-            <Link href={`${pathname}?${namePage}-page=${pageSize}`}>
+            <Link href={getLinkPage(pageSize)}>
             {pageSize}
             </Link>
         </p>
 
         {pageSize > 1 && <div className="flex gap-2 items-center">
-        {pageSize > 4 && <Link href={`${pathname}?${namePage}-page=1`}
-        scroll={false}
+        {pageSize > 4 && <Link href={getLinkPage(1)}
+        scroll={false} replace
         className="flex items-center justify-center w-7 h-7
         rounded-full shadow-default shadow-shadow hover:bg-bg-2">
         1
@@ -45,10 +45,10 @@ const Paginator = ({pageSize, namePage}:PaginatorProps) => {
         <div className="flex items-center gap-2">
             
             {Array.from({length:pageSize}, (_, i) => (
-            <button key={i} className={`h-4 w-4 rounded-full
-            ${i === page.page - 1 ? 'bg-fg': 'bg-bg'}
+            <Link  href={getLinkPage(i+1)} key={i} className={`h-4 w-4 rounded-full
+            ${i === page - 1 ? 'bg-fg': 'bg-bg'}
             shadow-default shadow-shadow hover:scale-125
-            cursor-pointer`} />))}
+            cursor-pointer`} replace scroll={false}/>))}
           
         </div>
         
@@ -57,7 +57,7 @@ const Paginator = ({pageSize, namePage}:PaginatorProps) => {
             <TbChevronCompactRight size={24}/>
         </button>
 
-        {pageSize > 4 && <Link href={`${pathname}?${namePage}-page=${pageSize}`}
+        {pageSize > 4 && <Link href={getLinkPage(pageSize)}
         scroll={false}
         className="flex items-center justify-center w-7 h-7
         rounded-full shadow-default shadow-shadow hover:bg-bg-2">

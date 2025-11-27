@@ -461,7 +461,7 @@ export async function countCartItemsByUserId() {
     "use cache: private";
    
     const session = await auth()
-    if(!session?.user?.id) redirect('/login')
+    if(!session?.user?.id) return
     cacheTag(`cart:${session?.user?.id}`)
     cacheLife({revalidate:1800})
 

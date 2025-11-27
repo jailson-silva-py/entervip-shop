@@ -18,10 +18,10 @@ export const ProfileDropdownClient = ({user}:{user:User}) => {
 
    
 
-    if(!user && status==='unauthenticated') {
+    if(!user) {
 
         return (
-    <Link title="Fazer Login" href="login"
+    <Link title="Fazer Login" href="/login"
     className="mx-2 p-1 rounded-full shadow-[0_0_0_1px]
     shadow-shadow cursor-pointer hover:shadow-[0_0_0_2px]
     hover:scale-105 hover:[&>svg]:stroke-2">

@@ -1,7 +1,7 @@
 import { deleteProductCart, getCartItemsByUserId, getFullPricesCartItems, updateQtyCartItem} from "@/actions"
 import { getFullPrice } from "@/utils/getValues"
 import Image from "next/image"
-import { BtnDelete, InputQuantidade } from "./cart-ux"
+import { BtnDelete, InputQuantidade, PaginatorCart } from "./cart-ux"
 import { CartItemForCart } from "@/types/utilityTypes"
 import Link from "next/link"
 
@@ -73,9 +73,11 @@ const CartItem = async ({cartItem}:{cartItem:CartItemForCart}) => {
 
 }
 
+const pageSize = 5
+
 const Cart = async () => {
     
-    const cartItems = await getCartItemsByUserId(1, 10)
+    const cartItems = await getCartItemsByUserId(1, pageSize)
     const fullPriceArray = await getFullPricesCartItems(cartItems[0]?.cartId,
         cartItems[0]?.cart.userId)
     
@@ -92,6 +94,7 @@ const Cart = async () => {
             </h2>
             <hr className="opacity-20"/>
             {cartItems.length > 0 ?
+            <>
             <ul>
 
             {cartItems.map((cartItem, i) => (
@@ -101,10 +104,13 @@ const Cart = async () => {
                 
             ))}
 
-            </ul>:
+            </ul>
+            <PaginatorCart pageSize={pageSize} countCartItems={fullPriceArray.length}/>
+            </>:
             <p className="my-4">Nenhum produto foi adicionado ao carrinho.</p>}
+
         </div>
-        <div className="max-lg:-order-1 max-lg:w-full bottom-0 left-5/10 flex-1
+        <div className="h-max max-lg:-order-1 max-lg:w-full bottom-0 left-5/10 flex-1
         p-8 bg-bg-accent flex flex-col gap-4 shadow-xs rounded-sm
         shadow-shadow">
             <h1 className="font-medium">Resumo da compra</h1>
