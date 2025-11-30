@@ -90,7 +90,7 @@ const Slider = ({listSlides}:Iprops) => {
                     items-center justify-center 
                      relative">
                         <Image alt={`slide: ${v}`} src={v}
-                        priority  fill sizes="100vw, auto"/>
+                        priority  fill quality={75}/>
                     </div>
 
                 ))}

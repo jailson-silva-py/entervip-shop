@@ -98,4 +98,14 @@ export type CartItemForCart = Prisma.CartItemGetPayload<{
 export type CartItemsForCart =  CartItemForCart[]
 
 
-export type searchParams = Promise<{[key:string]: string | string[] | undefined}>
+export type searchParams = Promise<{[key:string]: string | undefined}>
+
+export type typesToast = 'info' | 'error' | 'success'
+
+export type ToastProps =  {
+
+    type:typesToast,
+    msg:string,
+    id:string
+
+}

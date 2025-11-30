@@ -37,7 +37,7 @@ export const ProfileDropdownClient = ({user}:{user:User}) => {
     cursor-pointer group" 
     onClick={() => setOpen(prev => !prev)}>
 
-        <Image priority alt={`Perfil de ${user.name}`}
+        <Image priority alt="profile-image"
         src={user.image || "/not-profile-image.webp"}
         width={50} height={50} className="rounded-full 
         group-hover:shadow-xl shadow-shadow"/>

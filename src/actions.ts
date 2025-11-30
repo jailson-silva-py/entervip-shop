@@ -1,9 +1,10 @@
 "use server";
 import { cacheLife, cacheTag, updateTag } from "next/cache";
 import { prisma } from "prisma";
-import { CartItemForCart, ProductForCard, ProductFullForPage } from "./types/utilityTypes";
+import { CartItemForCart, ProductForCard, ProductFullForPage, ToastProps } from "./types/utilityTypes";
 import { auth } from "auth";
 import { redirect } from "next/navigation";
+import { randomUUID } from "crypto";
 
 export async function getCategory(slug:string, minimize=false) {
     "use cache";
@@ -499,7 +500,8 @@ export async function getFullPricesCartItems(cartId:string, userId:string) {
 
 }   
 
-export async function addProductToCart(userId:string, cartId:string, variantId:string, qty?:number) {
+export async function addProductToCart(
+userId:string, cartId:string, variantId:string, qty?:number):Promise<ToastProps> {
     
     try {
 
@@ -508,9 +510,20 @@ export async function addProductToCart(userId:string, cartId:string, variantId:s
     })  
     updateTag(`cart:${userId}`)
 
+    return {
+        id:randomUUID(),
+        msg:'Item adicionado ao carrinho!',
+        type:'success'
+        }
+
     } catch {
 
-    return {error:'Erro ao adicionar item ao carrinho.'}
+    return {
+        id:randomUUID(),
+        msg:'Erro ao adicionar item ao carrinho!',
+        type:'error'
+        }
+
 
     }
    
@@ -519,14 +532,20 @@ export async function addProductToCart(userId:string, cartId:string, variantId:s
     
 }
 
-export async function updateQtyCartItem(cartItem:CartItemForCart, qty:number) {
+export async function updateQtyCartItem(
+    cartItem:CartItemForCart, qty:number):Promise<ToastProps|undefined>  {
 
     try {
         const qtyAvaliable = (cartItem.variant.inventory?.quantity || 0) - (cartItem.variant.inventory?.reserved || 0)
 
         if (qty <= 0 || qty > qtyAvaliable) {
 
-            return {error:'Quantidade não condizente com estoque.'}
+        return {
+        id:randomUUID(),
+        msg:'Erro, Quantia não permitida!',
+        type:'error'
+        }
+
 
         }
 
@@ -541,28 +560,50 @@ export async function updateQtyCartItem(cartItem:CartItemForCart, qty:number) {
 
     } catch {
 
-        return {error:'Erro ao atualizar quantidade do produto.'}
+        return {
+        id:randomUUID(),
+        msg:'Erro ao atualizar a quantidade!',
+        type:'error'
+        }
+
 
     }
 
 }
 
-export async function deleteProductCart(userId:string, cartId:string, id:string) {
+export async function deleteProductCart(id:string):Promise<ToastProps> {
     
+    const session = await auth()
+    if (!session?.user) redirect('/login')
 
+    
     try {
 
         await prisma.cartItem.delete({
 
-            where:{id,cartId, cart:{userId}}
+            where:{id,cart:{userId:session.user.id}},
 
         })
+        
 
-        updateTag(`cart:${userId}`)
+        updateTag(`cart:${session.user.id}`)
+        
+        return {
+
+            id:randomUUID(),
+            msg:'Item deletado com sucesso!',
+            type:'success'
+
+        }
 
     } catch(error) {
 
-        return {error:'Erro ao deletar item do carrinho.'}
+        return {
+        id:randomUUID(),
+        msg:'Item adicionado ao carrinho!',
+        type:'success'
+        }
+
 
     }
 

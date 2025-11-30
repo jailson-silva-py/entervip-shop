@@ -1,4 +1,4 @@
-import { TbChevronDown, TbLoader, TbSearch, TbShoppingCart } from "react-icons/tb"
+import { TbLoader, TbSearch, TbShoppingCart } from "react-icons/tb"
 import ItemExpandable from "./ItemExpandable"
 import Link from "next/link"
 import Image from "next/image"
@@ -66,8 +66,6 @@ const NavBar = async () => {
                
                                                                                                                                                                                                                                 
                 <ItemExpandable name="Categorias"
-                Icon={<TbChevronDown size={18} 
-                className="text-text"/>}
                 listCategory={listCategoryObj}/>
 
 
@@ -104,7 +102,8 @@ const CartLink = async () => {
                 
         <TbShoppingCart size={32} 
         className="text-text stroke-[0.5] hover:stroke-[1.5]"/>
-        { cartItems && <div className="p-1 rounded-full h-5  min-w-5 font-normal
+        { cartItems  &&
+        <div className="p-1 rounded-full h-5  min-w-5 font-normal
         bg-text text-bg absolute top-0 -translate-y-2/10 -right-3
         flex items-center justify-center">
             {cartItems > 99 ? "99+":cartItems}

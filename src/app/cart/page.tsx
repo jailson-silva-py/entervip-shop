@@ -1,8 +1,8 @@
 import { deleteProductCart, getCartItemsByUserId, getFullPricesCartItems, updateQtyCartItem} from "@/actions"
 import { getFullPrice } from "@/utils/getValues"
 import Image from "next/image"
-import { BtnDelete, InputQuantidade, PaginatorCart } from "./cart-ux"
-import { CartItemForCart } from "@/types/utilityTypes"
+import { BtnDelete, FormUpdateQty, InputQuantidade, PaginatorCart } from "./cart-ux"
+import { CartItemForCart, searchParams } from "@/types/utilityTypes"
 import Link from "next/link"
 
 const CartItem = async ({cartItem}:{cartItem:CartItemForCart}) => {
@@ -16,20 +16,9 @@ const CartItem = async ({cartItem}:{cartItem:CartItemForCart}) => {
         <>
         <li className="relative grid max-md:grid-cols-[50px_auto_100px]
         grid-rows-[25px_25px] grid-cols-[50px_50px_auto_125px_125px] gap-x-4 max-md:gap-x-2 py-6">
-        <form action={async () => {
-            "use server";
-
-            await deleteProductCart(cartItem.cart.userId,
-                cartItem.cartId, cartItem.id)
-            
-
-        }}
-        className="max-md:col-start-3 max-md:row-start-2 bg-bg-accent rounded-sm
-        p-1 w-full h-full md:row-span-2 md:shadow-default shadow-shadow
-        hover:brightness-95 right-2.5 bottom-2
-        max">
-        <BtnDelete/>
-        </form>
+        
+        <BtnDelete cartItem={cartItem}/>
+    
         <Image alt="image-product" width={50} height={50}
           src={variant?.product?.images[0]?.url || '/not-found.png'}/>
         <span>
@@ -41,17 +30,7 @@ const CartItem = async ({cartItem}:{cartItem:CartItemForCart}) => {
         </span>
 
         <div className="gap-2 font-semibold text-2xl h-max max-md:col-start-2 max-md:row-start-2">
-            <form action={async (formData:FormData) => {
-                "use server";
-                const quantidade = parseInt(formData.get('qty') as string)
-                await updateQtyCartItem(cartItem, quantidade)
-
-            }} className="flex items-start justify-start">
-                <InputQuantidade qty={cartItem.qty}
-                qtyAvaliable={qtyAvaliable}/>
-                
-            </form>
-            
+            <FormUpdateQty cartItem={cartItem} qtyAvaliable={qtyAvaliable}/>
         </div>
         <p className="my-1.5 max-md:hidden max-md:absolute col-start-4
         row-start-2 max-md:text-[10px] font-normal text-xs">
@@ -75,9 +54,11 @@ const CartItem = async ({cartItem}:{cartItem:CartItemForCart}) => {
 
 const pageSize = 5
 
-const Cart = async () => {
+const Cart = async ({searchParams}:{searchParams:searchParams}) => {
     
-    const cartItems = await getCartItemsByUserId(1, pageSize)
+    const filter = await searchParams
+    const page = parseInt(filter['cart-page'] || '1')
+    const cartItems = await getCartItemsByUserId(page, pageSize)
     const fullPriceArray = await getFullPricesCartItems(cartItems[0]?.cartId,
         cartItems[0]?.cart.userId)
     

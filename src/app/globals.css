@@ -15,12 +15,6 @@
     height: 0;
   }
 
-  .no-number-btns::inp {
-
-
-
-  }
-
   .validator-text{@apply text-[10px] text-wrap hyphens-auto
     wrap-break-word font-normal text-red-700;}
 
@@ -43,6 +37,9 @@
 @theme {
 
   --color-fg: oklch(0.6824 0.0852 55.05);
+  --color-success: oklch(0.6731 0.1973 140.82);
+  --color-error: oklch(0.451 0.1719 27.74);
+  --color-info: oklch(0.3869 0.1719 275.98);
   --color-fg-aph: oklch(0.6824 0.0852 55.05 / 30%);
   --color-fg-hover: oklch(0.64 0.0852 55.05);  
   --color-bg: oklch(0.898 0.0151 55.05);
@@ -56,9 +53,13 @@
   --shadow-default: 0 0 0 1px var(--tw-shadow-color);
   --shadow-default-2: 0 0 0 2px var(--tw-shadow-color);
   --shadow-default-xs: 0 0 0 3px var(--tw-shadow-color);
+  --shadow-double-dxs:0 0 0 1px var(--tw-shadow-color),
+  0 3px 5px 0 var(--tw-shadow-color);
   --shadow-comment: -2px 0 0 0 var(--tw-shadow-color);
   --animate-show: .5s show ease-in-out;
   --animate-max-width: .5s ease-out max-width;
+  --animate-timing-toast: 5s reduce-width linear forwards;
+  --animate-show-to-bottom: .5s show-to-bottom ease-out;
 
   @keyframes show {
 
@@ -69,6 +70,26 @@
   @keyframes max-width {
 
     to {width: 99%;}
+
+  }
+
+  @keyframes reduce-width {
+
+    to {width: 0%}
+
+  }
+
+  @keyframes show-to-bottom {
+
+    from {
+      opacity: 0;
+      transform: translateY(-50px);
+    } to {
+
+      opacity: 1;
+      transform: translateY(0)
+
+    }
 
   }
 

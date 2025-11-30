@@ -4,6 +4,8 @@ import "./globals.css";
 import NavBar from "@/components/NavBar";
 import { SessionProvider } from "next-auth/react";
 import Footer from "@/components/Footer";
+import Toast from "@/components/Toast";
+import { ToastProvider } from "@/contexts/ToastContext";
 
 const rajdhani = Rajdhani({
 
@@ -26,11 +28,16 @@ export default function RootLayout({
       <body
         className={` ${rajdhani.className} bg-bg h-full w-full overflow-x-hidden antialiased`}
       >  
+      
       <SessionProvider>
+      <ToastProvider>
+        <Toast />
         <NavBar/>
-      </SessionProvider>
         {children}
         <Footer/>
+      </ToastProvider>
+      </SessionProvider>
+      
       </body>
     </html>
   );

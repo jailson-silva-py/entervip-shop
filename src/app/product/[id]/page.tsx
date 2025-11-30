@@ -2,6 +2,7 @@ import { addProductToCart, getCartIdAndUserId, getProductById } from "@/actions"
 import Comments from "@/components/Comments"
 import ImagesProduct from "@/components/ImagesProduct"
 import { BtnAction } from "@/components/BtnAction"
+import { AddToCartForm } from "./forms-client"
 
 const ProductPage = async ({params}:{params:Promise<{id:string}>}) => {
 
@@ -41,16 +42,8 @@ const ProductPage = async ({params}:{params:Promise<{id:string}>}) => {
             
 
             <BtnAction text="Comprar" variantBtn="grad-fg-fg-aph"/>
+            <AddToCartForm cartId={cartId} product={product}  userId={userId}/>
             
-            <form action={async () => {
-                "use server"
-            await addProductToCart(userId, cartId as string,
-            product.variants[0]?.id)
-
-            }}>
-            <BtnAction text="Adicionar ao carrinho" 
-            variantBtn="grad-gold-gold-aph"/>
-            </form>
 
             </div>
             

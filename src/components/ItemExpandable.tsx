@@ -1,20 +1,22 @@
 "use client";
 import useOutclickElement from '@/hooks/useOutClick';
-import { JSX, useState } from 'react'
+import { useState } from 'react'
 import Link from 'next/link';
+import { TbChevronDown } from 'react-icons/tb';
 
 interface Iprops  {
 
-    Icon:JSX.Element,
     name:string,
     listCategory:{name:string, slug:string}[]
 
 }
 
-const ItemExpandable  = ({Icon, name, listCategory}:Iprops) => {
+const ItemExpandable  = ({name, listCategory}:Iprops) => {
 
     const [visible, setVisible] = useState(false)
     const { refElement } = useOutclickElement(() => setVisible(false))
+    const rotateIcon = visible ? `-rotate-180`:''
+
     return(
     <li ref={refElement} 
     className='group group-hover:font-extrabold
@@ -25,7 +27,8 @@ const ItemExpandable  = ({Icon, name, listCategory}:Iprops) => {
     justify-center appearance-none border-none cursor-pointer
     bg-transparent hover:[&>svg]:stroke-2 hover:font-normal">
         <span>{name}</span>
-        {Icon}
+        <TbChevronDown size={18} className={`text-text
+        ${rotateIcon} transition-transform ease-in-out duration-300`}/>
     </button>
 
     {visible && 

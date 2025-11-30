@@ -1,36 +1,52 @@
 "use client"
+import { deleteProductCart, updateQtyCartItem } from "@/actions"
 import BtnWithLoading from "@/components/BtnWithLoading"
+import { ToastContext } from "@/contexts/ToastContext"
 import useOutclickElement from "@/hooks/useOutClick"
 import usePaginator from "@/hooks/usePaginator"
+import { CartItemForCart, ToastProps } from "@/types/utilityTypes"
 import Link from "next/link"
 import { useSearchParams } from "next/navigation"
-import { RefObject, useRef, useState } from "react"
-import { useFormStatus } from "react-dom"
-import { TbChevronsLeft, TbChevronsRight, TbTrash } from "react-icons/tb"
+import { FormEvent, RefObject, use, useActionState, useEffect, useRef, useState, useTransition } from "react"
+import { TbLoader, TbTrash } from "react-icons/tb"
 
+export const BtnDelete = ({cartItem}:{cartItem:CartItemForCart}) => {
 
-export const BtnDelete = () => {
+    const [_, setToastObj] = use(ToastContext)
 
+    const handleSubmit = (e:FormEvent) => {
+        e.preventDefault();
+        (async () => {
+            const toast = await deleteProductCart(cartItem?.id)
+            setToastObj(toast)
+        })()
+
+    }
     return (
+    <form onSubmit={handleSubmit}
+    className="max-md:col-start-3 max-md:row-start-2 bg-bg-accent rounded-sm
+    p-1 w-full h-full md:row-span-2 md:shadow-default shadow-shadow
+    hover:brightness-95 right-2.5 bottom-2">
     <BtnWithLoading size={24} type="submit" className="w-full h-full 
     cursor-pointer flex items-center
     justify-center">
     <TbTrash size={24} className="text-red-700 stroke-[.5]"/>
     </BtnWithLoading>
+    </form>
     )
 }
 
 interface InputQuantidadeProps {
 
     qty:number,
-    qtyAvaliable:number
+    qtyAvaliable:number,
+    pending:boolean
 
 }
 
-export const InputQuantidade = ({qty, qtyAvaliable}:InputQuantidadeProps) => {
+export const InputQuantidade = ({qty, qtyAvaliable, pending}:InputQuantidadeProps) => {
 
     const [editable, setEditable] = useState(false)
-    const { pending } = useFormStatus()
     const {refElement} = useOutclickElement(
         () => setEditable(false))
 
@@ -105,7 +121,7 @@ export const PaginatorCart = ({countCartItems, pageSize}:PaginatorCartProps) => 
     return (
 
     <div className="relative my-6 flex gap-2 h-9 w-full justify-center items-center">
-        {pageSearch > 2 && <Link href={getLinkPage(1)}
+        {pageSearch > 2 && maxPages > 3 && <Link href={getLinkPage(1)}
         className="h-6 w-6 flex items-center justify-center
         bg-bg-accent hover:brightness-95 text-text text-sm
         shadow-shadow shadow-default rounded-sm font-semibold">
@@ -137,13 +153,52 @@ export const PaginatorCart = ({countCartItems, pageSize}:PaginatorCartProps) => 
         </ul>
         </div>
 
-        { pageSearch < 5 && <Link href={getLinkPage(maxPages)}
+        { pageSearch < maxPages - 1 && maxPages > 3 && <Link href={getLinkPage(maxPages)}
         className="h-6 w-6 flex items-center justify-center
         bg-bg-accent hover:brightness-95 text-text text-sm
         shadow-shadow shadow-default rounded-sm font-semibold">
             {maxPages}
         </Link>}
     </div>
+
+    )
+
+}
+
+type FormUpdateQtyProps = {
+
+    cartItem:CartItemForCart,
+    qtyAvaliable:number
+
+}
+const initialStateQty:undefined|ToastProps = undefined
+
+export const FormUpdateQty = ({cartItem, qtyAvaliable}:FormUpdateQtyProps) => {
+
+    const action = async (_:any, formData:FormData) => {
+           
+        const quantidade = parseInt(formData.get('qty') as string)
+        const toast = await updateQtyCartItem(cartItem, quantidade)
+        return toast
+    }
+
+    const [state, formAction, isPending] = useActionState(action, initialStateQty)
+    const [_, setToastObj] = use(ToastContext)
+    useEffect(() => {
+
+        if (!state) return 
+
+        setToastObj(state)
+
+    }, [state])
+
+    return (
+
+        <form action={formAction} className="flex items-start justify-start">
+            <InputQuantidade qty={cartItem.qty}
+            qtyAvaliable={qtyAvaliable} pending={isPending}/>
+                
+        </form>
 
     )
 

@@ -35,7 +35,7 @@ export const BtnAction:React.FC<BtnActionProps> = (
    
     <BtnWithLoading size={24} type="submit" className={`${bg} w-full max-w-75 py-2 px-4 rounded-sm
         font-medium cursor-pointer shadow-default shadow-shadow
-        hover:brightness-95 flex items-center justify-center`} {...props}>
+        hover:brightness-95 flex items-center justify-center disabled:opacity-75`} {...props}>
         {text}
     </BtnWithLoading>
     
