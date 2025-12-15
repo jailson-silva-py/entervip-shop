@@ -53,7 +53,6 @@ model User {
   reviews   Review[]
   addresses Address[]
 
- 
   @@map("users")
 }
  
@@ -68,6 +67,7 @@ model VerificationToken {
 
 
 model Address {
+  
   id        String   @id @default(cuid())
   userId    String
   label     String?  // "Home", "Work"

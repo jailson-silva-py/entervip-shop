@@ -32,14 +32,14 @@ export const ProfileDropdownClient = ({user}:{user:User}) => {
     } else if (user){
 
     return <div className="relative" ref={refElement}>
-    <button className="relative  mx-2 h-10 w-10 tracking-widest font-light flex
+    <button className="relative mx-2 h-10 w-10 tracking-widest font-light flex
     flex-col items-center justify-center hover:scale-105 gap-2
     cursor-pointer group" 
     onClick={() => setOpen(prev => !prev)}>
 
         <Image priority alt="profile-image"
         src={user.image || "/not-profile-image.webp"}
-        width={50} height={50} className="rounded-full 
+        fill className="rounded-full 
         group-hover:shadow-xl shadow-shadow"/>
 
 

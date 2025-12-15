@@ -609,29 +609,78 @@ export async function deleteProductCart(id:string):Promise<ToastProps> {
 
 }
 
-export async function findUserById(userId?:string|undefined) {
+export async function findUserById(userId?:string|undefined, addresses=false) {
 
     "use cache: private";
-
-    cacheTag(`user:${userId}`)
-    cacheLife({stale:60*15})
-    if(!userId) {
-
-        const session = await auth()
-
-        if(!session?.user) return
-
-        return prisma.user.findUnique({
-            where:{
-                id:session?.user?.id
-            }
-        })
-
-    }
     
+    const id = userId ?? (await auth())?.user?.id
+
+    if (!id) return
+
+    cacheTag(`user:${id}`)
+    cacheLife({stale:60*15})
     
     const user = await prisma.user.findUnique({
-        where:{id:userId}})
+        where:{id},
+        include:{addresses}})
 
     return user
 }
+
+
+export async function updateUserById(formData:FormData):Promise<ToastProps> {
+
+    const session = await auth()
+
+    if (!session?.user?.id) {
+
+        return {
+        id:randomUUID(), msg:"Usuário não logado!", type:"error"
+        }
+
+    }
+
+    const name:string|undefined = formData.get("username") as string ?? undefined
+    const email:string|undefined = formData.get("email") as string ?? undefined
+    const imageFile = formData.get("imageFile") ?? undefined
+    var image:undefined|string;
+    
+    
+
+    try {
+        if (imageFile) {
+
+            const form = new FormData()
+            form.set('file', imageFile)
+            form.set('upload_preset', 'unsigned_preset')
+            const uploadImage = await fetch(process.env.CLOUDINARY_URL!, 
+            {body:form, method:'POST'})
+
+            const res = await uploadImage.json()
+
+            image = res.url
+
+        }
+        
+        await prisma.user.update({
+
+            where:{id:session.user.id},
+            data:{name, email, image}
+
+        })
+
+        return {
+        id:randomUUID(), msg:"Informações atualizadas!",
+        type:"success"
+        }
+
+    } catch {
+
+        return {
+        id:randomUUID(), msg:"Erro ao atualizar usuário!",
+        type:"error"
+        }
+
+    }
+
+}   
